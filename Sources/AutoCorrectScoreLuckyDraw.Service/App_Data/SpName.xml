@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Functions>
+	<Function Name="Settle Lucky Draw">
+		<Setting Key="NAP_Settlement_LuckyDrawMatch_Select" SpName="NAP_Settlement_LuckyDrawMatch_Select" DbName="DBCTG.bodb02.wsv_nap" TimeOut="20" />
+		<Setting Key="NAP_Settlement_LuckyDrawMember_Select" SpName="NAP_Settlement_LuckyDrawMember_Select" DbName="DBSIC.bodb02.wsv_nap" />
+		<Setting Key="NAP_Settlement_LuckyDrawMember_Insert" SpName="NAP_Settlement_LuckyDrawMember_Insert" DbName="DBCTG.bodb02.wsv_nap" />
+		<Setting Key="WriteLog_UserLog_Settle" SpName="WriteLog_UserLog_Settle" DbName="DBLOG.bodb_CustomerLog.wsv_nap" TimeOut="20" />
+	</Function>
+
+	<Function Name="Update notification and Upload BatchMessage">
+		<Setting Key="NAP_LuckyDrawNotification_Select" SpName="NAP_LuckyDrawNotification_Select" DbName="DBCTG.bodb02.wsv_nap" />
+		<Setting Key="NAP_SpecialDelete_Message_Insert" SpName="NAP_SpecialDelete_Message_Insert" DbName="DBMSG.bodb_Message.wsv_nap" />
+		<Setting Key="NAP_SpecialDelete_BatchMessage_Upload" SpName="NAP_SpecialDelete_BatchMessage_Upload" DbName="DBMSG.bodb_Message.wsv_nap" />
+		<Setting Key="NAP_LuckyDrawNotification_Upd" SpName="NAP_LuckyDrawNotification_Upd" DbName="DBCTG.bodb02.wsv_nap" />
+	</Function>
+</Functions>
