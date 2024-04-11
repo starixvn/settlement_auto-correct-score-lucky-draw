@@ -5,6 +5,9 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
+  <ItemGroup>
+    <None Remove="Templates\template.cshtml" />
+  </ItemGroup>
 
   <ItemGroup>
     <Content Include="appsettings.DEV.json">
@@ -37,6 +40,9 @@
     <Content Include="appsettings.UAT.json">
 	    <DependentUpon>appsettings.json</DependentUpon>
 		<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\template.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
 

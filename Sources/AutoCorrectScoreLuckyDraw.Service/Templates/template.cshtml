@@ -1,0 +1,58 @@
+- Match: @Model «Home Team Name in English» vs «Away Team Name in English»
+- MatchID: @Model.MatchId
+- KO Time (GMT + 8): «Kickofftime, format: MM/dd/yyyy hh:mm tt»
+- Lucky Draw Date: «CreatedDate, format: MM/dd/yyyy»
+- List of winning members:
+
+<table>
+    <tr style="background-color:#0095CC">
+        <th style="width:60px">No.</th>
+        <th style="width:150px">Member</th>
+        <th style="width:150px">Site</th>
+        <th style="width:150px">Amount</th>
+        <th style="width:200px">Currency</th>
+    </tr>
+    @{
+        var i = 1;
+    }
+    @foreach (var item in Model.TicketsInfo)
+    {
+        <tr>
+            <td>@i</td>
+            <td>@item.TransId</td>
+            <td>@item.TicketType</td>
+            <td>@item.CustId</td>
+            <td>@item.Username</td>
+        </tr>
+        i++;
+    }
+</table>
+
+<style>
+    body {
+        font-family: tahoma;
+        font-size: 12px;
+    }
+
+    table {
+        border-collapse: collapse;
+    }
+
+    table, td, th {
+        border: 1px solid black;
+        text-align: center;
+    }
+
+    th {
+        padding: 4px;
+        color: white;
+        font-family: tahoma;
+        font-size: 12px;
+    }
+
+    td {
+        padding: 4px;
+        font-family: tahoma;
+        font-size: 12px;
+    }
+</style>

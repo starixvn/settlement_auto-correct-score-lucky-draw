@@ -1,5 +1,5 @@
-﻿using CorrectScoreLuckyDraw.Models;
-using Fanex.Settlement.Converter.Services;
+﻿using CorrectScoreLuckyDraw.Constants;
+using CorrectScoreLuckyDraw.Models;
 
 namespace CorrectScoreLuckyDraw.Services;
 
@@ -9,25 +9,50 @@ public interface AutoNotificationController
 }
 
 public class AutoNotificationControllerImp(
-    IDynamicRepository repository,
     NotificationService notificationService,
-    BatchMessageService messageService,
-    XmlConvertService xmlConvertService) : AutoNotificationController
+    SiteMessageService siteMessageService) : AutoNotificationController
 {
     public async Task Process()
     {
         var notifications = await notificationService.GetNotification();
-        foreach (var notification in notifications)
+        var drawIds = await InsertMessage(notifications);
+
+        await UpdateNotification(drawIds);
+    }
+
+    private async Task SendMail(List<Ticket> tickets)
+    {
+    }
+
+    private async Task<List<int>> InsertMessage(List<Ticket> tickets)
+    {
+        var drawIds = new List<int>();
+        foreach (var item in tickets)
         {
-            var value = new Ticket();
-            var messageId = await messageService.GetMessageId(value);
-            if (messageId > 0)
+            Result result;
+            if (item.Site.Equals(Site.Name))
             {
-                var listMessage = new List<MessageItem>();
-                var result = await messageService.CreateMessageUpload(listMessage, 1);
+                result = await siteMessageService.SiteIBCIndo(item);
+            }
+            else
+            {
+                result = await siteMessageService.SiteNotIBCIndo(item);
+            }
+
+            if (result.ErrorCode == 0)
+            {
+                drawIds.Add(item.DrawId);
             }
         }
 
-        //notificationService.UpdateNotification();
+        return drawIds;
+    }
+
+    private async Task UpdateNotification(IReadOnlyCollection<int> drawIds)
+    {
+        if (drawIds.Count > 0)
+        {
+            await notificationService.UpdateNotification(string.Join(",", drawIds));
+        }
     }
 }

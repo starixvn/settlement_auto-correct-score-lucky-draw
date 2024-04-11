@@ -8,11 +8,11 @@ public static class NotIbcIndo
                                      + "<font color='red'>Kindly be reminded that the prize claim period is one week (Before @expired_date)</font>.";
 
     public const string ContentCantonese = "尊敬的顧客，恭喜您獲獎, 獎金金額是 @currency_name @prize_amount. "
-                                          + "您的驗證碼是 \"verification_code\". 請在本周內聯系我們的客服部門, 提供您的驗證碼來領取您的獎品. 您可以在會員網站的“聯系我們”部分找到客服聯系方式. 請不要錯過! "
+                                          + "您的驗證碼是 \"@verification_code\". 請在本周內聯系我們的客服部門, 提供您的驗證碼來領取您的獎品. 您可以在會員網站的“聯系我們”部分找到客服聯系方式. 請不要錯過! "
                                           + "<font color='red'>溫馨提醒：領取獎品有效期為一周 (在 @expired_date 之前)</font>.";
 
     public const string ContentMandarin = "尊敬的顾客，恭喜您获奖, 奖金金额是 @currency_name @prize_amount. "
-                                         + "您的验证码是 \"verification_code\". 请在本周内联系我们的客服部门, 提供您的验证码来领取您的奖品. 您可以在会员网站的“联系我们”部分找到客服联系方式. 请不要错过! "
+                                         + "您的验证码是 \"@verification_code\". 请在本周内联系我们的客服部门, 提供您的验证码来领取您的奖品. 您可以在会员网站的“联系我们”部分找到客服联系方式. 请不要错过! "
                                          + "<font color='red'>温馨提醒：领取奖品有效期为一周 (在 @expired_date 之前)</font>.";
 }
 

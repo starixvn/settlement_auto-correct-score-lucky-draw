@@ -1,10 +1,10 @@
-﻿namespace ThirdPartyBroadcast.Consumer.Criteria;
+﻿namespace CorrectScoreLuckyDraw.Criteria;
 
 public class UploadBatchMessageCriteria : NonQueryCommand
 {
     public string XMLMessage { get; set; }
 
-    public int CreatorId { get; set; } = 10278938;
+    public int CreatorId { get; set; } = Constants.Creator.Id;
 
     public int ErrorCode { get; set; }
 

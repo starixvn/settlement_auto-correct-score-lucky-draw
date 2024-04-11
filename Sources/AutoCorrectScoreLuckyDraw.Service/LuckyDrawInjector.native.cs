@@ -35,6 +35,8 @@ public static class LuckyDrawInjector
         service.AddSingleton<RefDataService, RefDataServiceImp>();
         service.AddSingleton<BatchMessageService, BatchMessageServiceImp>();
         service.AddSingleton<NotificationService, NotificationServiceImp>();
+        service.AddSingleton<MessageAnnouncementService, MessageAnnouncementServiceImp>();
+        service.AddSingleton<SiteMessageService, SiteMessageServiceImp>();
 
         service.AddSingleton<XmlConvertService, XmlConvertServiceImp>();
         service.AddSingleton<IDynamicRepository, DynamicRepository>();

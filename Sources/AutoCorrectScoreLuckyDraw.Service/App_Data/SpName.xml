@@ -7,7 +7,7 @@
 		<Setting Key="WriteLog_UserLog_Settle" SpName="WriteLog_UserLog_Settle" DbName="DBLOG.bodb_CustomerLog.wsv_nap" TimeOut="20" />
 	</Function>
 
-	<Function Name="Update notification and Upload BatchMessage">
+	<Function Name="Update ticket and Upload BatchMessage">
 		<Setting Key="NAP_LuckyDrawNotification_Select" SpName="NAP_LuckyDrawNotification_Select" DbName="DBCTG.bodb02.wsv_nap" />
 		<Setting Key="NAP_SpecialDelete_Message_Insert" SpName="NAP_SpecialDelete_Message_Insert" DbName="DBMSG.bodb_Message.wsv_nap" />
 		<Setting Key="NAP_SpecialDelete_BatchMessage_Upload" SpName="NAP_SpecialDelete_BatchMessage_Upload" DbName="DBMSG.bodb_Message.wsv_nap" />

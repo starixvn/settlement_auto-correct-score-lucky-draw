@@ -25,15 +25,15 @@ public class Ticket
 
     public string Username { get; set; }
 
-    public int? AgentId { get; set; }
+    public int AgentId { get; set; }
 
     public string AgentUsername { get; set; }
 
-    public int? MasterId { get; set; }
+    public int MasterId { get; set; }
 
     public string MasterUsername { get; set; }
 
-    public int? SuperId { get; set; }
+    public int SuperId { get; set; }
 
     public string SuperUsername { get; set; }
 

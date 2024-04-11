@@ -15,21 +15,16 @@ public class InsertMessageCriteria : NonQueryCommand
     [SpParam(SqlParamName = "Content_cs")]
     public string ContentCs { get; set; }
 
-    public int MatchId { get; set; }
+    [SpParam(SqlParamName = "Content_id")]
+    public string ContentId { get; set; }
 
-    public bool IsSticky { get; set; }
+    public int MatchId { get; set; }
 
     public short MsgType { get; set; } = 1;
 
-    public bool IsBatch { get; set; } = true;
-
-    public short MsgContentsType { get; set; }
-
-    public int Creator { get; set; }
+    public int Creator { get; set; } = Constants.Creator.Id;
 
     public string CreatorName { get; set; } = string.Empty;
-
-    public short? LeagueGroupId { get; set; }
 
     public override string GetSettingKey() => "NAP_SpecialDelete_Message_Insert";
 

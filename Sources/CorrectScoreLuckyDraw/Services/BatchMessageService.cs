@@ -1,47 +1,39 @@
 ﻿using CorrectScoreLuckyDraw.Criteria;
 using CorrectScoreLuckyDraw.Models;
 using Fanex.Settlement.Converter.Services;
-using ThirdPartyBroadcast.Consumer.Criteria;
 
 namespace CorrectScoreLuckyDraw.Services;
 
 public interface BatchMessageService
 {
-    Task<int> GetMessageId(Ticket notification);
+    Task<int> GetMessageId(Ticket ticket, string level);
 
-    Task<Result> CreateMessageUpload(List<MessageItem> items, int adminId);
+    Task<Result> UploadBatchMessage(List<MessageItem> items);
 }
 
 public class BatchMessageServiceImp(
     IDynamicRepository repository,
-    RefDataService refDataService,
+    MessageAnnouncementService messageAnnouncementService,
     XmlConvertService xmlConvertService) : BatchMessageService
 {
-    private InsertMessageCriteria CreateMessageCriteria(Ticket notification)
+    public async Task<int> GetMessageId(Ticket ticket, string level)
     {
-        notification.RefDataService = refDataService;
-        return new InsertMessageCriteria();
+        var criteria = messageAnnouncementService.CreateMessageCriteria(ticket, level);
+        //return await repository.GetAsync<int>(criteria);
+        return 1;
     }
 
-    public async Task<int> GetMessageId(Ticket notification)
-    {
-        var criteria = CreateMessageCriteria(notification);
-        return await repository.GetAsync<int>(criteria);
-    }
-
-    public async Task<Result> CreateMessageUpload(List<MessageItem> items, int adminId)
+    public async Task<Result> UploadBatchMessage(List<MessageItem> items)
     {
         var message = new Message
         {
             Items = items,
         };
-
         var xmlMessage = xmlConvertService.Serialize(message);
 
         var criteria = new UploadBatchMessageCriteria
         {
             XMLMessage = xmlMessage,
-            CreatorId = adminId
         };
 
         await repository.ExecuteAsync(criteria);
