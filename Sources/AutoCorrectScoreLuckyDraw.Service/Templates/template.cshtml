@@ -1,9 +1,9 @@
-- Match: @Model «Home Team Name in English» vs «Away Team Name in English»
-- MatchID: @Model.MatchId
-- KO Time (GMT + 8): «Kickofftime, format: MM/dd/yyyy hh:mm tt»
-- Lucky Draw Date: «CreatedDate, format: MM/dd/yyyy»
-- List of winning members:
-
+<div>- Match: @Model.Match.TeamName</div>
+<div>- MatchID: @Model.Match.MatchId</div>
+<div>- KO Time (GMT +8): @Model.Match.KickOffTime.ToString("MM/dd/yyyy hh:mm tt")</div>
+<div>- Lucky Draw Date: @Model.Match.CreatedDate.ToString("MM/dd/yyyy")</div>
+<div>- List of winning members:</div>
+<br />
 <table>
     <tr style="background-color:#0095CC">
         <th style="width:60px">No.</th>
@@ -15,14 +15,14 @@
     @{
         var i = 1;
     }
-    @foreach (var item in Model.TicketsInfo)
+    @foreach (var item in Model.Tickets)
     {
         <tr>
             <td>@i</td>
-            <td>@item.TransId</td>
-            <td>@item.TicketType</td>
-            <td>@item.CustId</td>
             <td>@item.Username</td>
+            <td>@item.Site</td>
+            <td>@item.PrizeAmount.ToString("#,0")</td>
+            <td>@item.CurrencyName</td>
         </tr>
         i++;
     }

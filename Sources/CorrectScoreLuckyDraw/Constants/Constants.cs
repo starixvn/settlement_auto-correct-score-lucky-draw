@@ -12,7 +12,7 @@ public static class Creator
 
 public static class Site
 {
-    public const string Name = "IBCIndo";
+    public const string IBCIndo = "IBCIndo";
 }
 
 public static class Levels

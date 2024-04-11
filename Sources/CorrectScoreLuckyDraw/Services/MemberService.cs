@@ -20,23 +20,7 @@ public class MemberServiceImp(IDynamicRepository repository) : MemberService
             MinBet = match.MinBet,
             IsTest = match.IsTest
         };
-
-        return
-        [
-            new Member
-            {
-                CustId = 1234,
-                StatusId = 1,
-                TransId = 1111111
-            },
-            new Member
-            {
-                CustId = 12345,
-                StatusId = 2,
-                TransId = 222222
-            }
-        ];
-        // return (await repository.FetchAsync<Member>(criteria)).ToList();
+        return (await repository.FetchAsync<Member>(criteria)).ToList();
     }
 
     public async Task InsertMembers(Match match, string members)

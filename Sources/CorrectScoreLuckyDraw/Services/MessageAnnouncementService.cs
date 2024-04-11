@@ -15,7 +15,7 @@ public class MessageAnnouncementServiceImp : MessageAnnouncementService
 {
     public InsertMessageCriteria CreateMessageCriteria(Ticket ticket, string level)
     {
-        if (!ticket.Site.Equals(Site.Name))
+        if (!ticket.Site.Equals(Site.IBCIndo))
         {
             ticket.ExpiredDate = ticket.ExpiredDate.AddDays(1);
         }

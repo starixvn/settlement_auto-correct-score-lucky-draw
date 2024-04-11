@@ -4,7 +4,7 @@ public class GetLuckyDrawMemberCriteria : CriteriaBase
 {
     public int MatchId { get; set; }
 
-    public int MinBet { get; set; }
+    public decimal MinBet { get; set; }
 
     public bool IsTest { get; set; }
 

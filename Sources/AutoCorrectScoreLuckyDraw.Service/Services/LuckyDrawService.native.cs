@@ -54,12 +54,12 @@ public class LuckyDrawService : IHostedService
         });
     }
 
-    public Task StartAsync(CancellationToken cancellationToken)
+    public async Task StartAsync(CancellationToken cancellationToken)
     {
         running = true;
-        var autoRefundThread = new Thread(ThreadProcess);
-        autoRefundThread.Start();
-        return Task.CompletedTask;
+        //var autoRefundThread = new Thread(ThreadProcess);
+        //autoRefundThread.Start();
+        await ThreadProcess();
     }
 
     public Task StopAsync(CancellationToken cancellationToken)
@@ -68,13 +68,13 @@ public class LuckyDrawService : IHostedService
         return Task.CompletedTask;
     }
 
-    private void ThreadProcess()
+    private async Task ThreadProcess()
     {
         while (running)
         {
             if (!maintenanceService.IsMaintenance)
             {
-                MainProcess();
+                await MainProcess();
 
                 var interval = configuration.GetSection("ServiceInterval").Value ?? "0";
 
@@ -83,12 +83,12 @@ public class LuckyDrawService : IHostedService
         }
     }
 
-    private void MainProcess()
+    private async Task MainProcess()
     {
         try
         {
-            //autoMatchController.Process();
-            autoNotificationController.Process();
+            await autoMatchController.Process();
+            await autoNotificationController.Process();
             HandleGarbageCollector();
         }
         catch (Exception exception)

@@ -9,56 +9,18 @@ public interface NotificationService
 
     Task UpdateNotification(string drawIdList);
 
-    Task SendNotification(List<Ticket> tickets);
+    void SendMail(List<Ticket> tickets);
 }
 
-public class NotificationServiceImp(IDynamicRepository repository) : NotificationService
+public class NotificationServiceImp(
+    IDynamicRepository repository,
+    RefDataService refDataService,
+    SendMailService sendMailService) : NotificationService
 {
     public async Task<List<Ticket>> GetNotification()
     {
         var criteria = new GetLuckyDrawNotificationCriteria();
-
-        return
-        [
-            new Ticket
-            {
-                MatchId = 12345,
-                DrawId = 11,
-                CustId = 8,
-                Username = "sa",
-                AgentId = 9,
-                AgentUsername = "Agent",
-                MasterId = 10,
-                MasterUsername = "Master",
-                SuperId = 11,
-                SuperUsername = "Super",
-                Site = "IBCIndo 1",
-                CurrencyName = "RM",
-                PrizeAmount = 2,
-                VerificationCode = "123123",
-                ExpiredDate = DateTime.Now
-            },
-
-            new Ticket
-            {
-                MatchId = 1234567,
-                DrawId = 22,
-                CustId = 8,
-                Username = "sa",
-                AgentId = 9,
-                AgentUsername = "Agent",
-                MasterId = 10,
-                MasterUsername = "Master",
-                SuperId = 11,
-                SuperUsername = "Super",
-                Site = "IBCIndo",
-                CurrencyName = "RM",
-                PrizeAmount = 2,
-                VerificationCode = "123123",
-                ExpiredDate = DateTime.Now
-            }
-        ];
-        // return (await repository.FetchAsync<Ticket>(criteria)).ToList();
+        return (await repository.FetchAsync<Ticket>(criteria)).ToList();
     }
 
     public async Task UpdateNotification(string drawIdList)
@@ -67,10 +29,29 @@ public class NotificationServiceImp(IDynamicRepository repository) : Notificatio
         {
             DrawIdList = drawIdList
         };
-        //await repository.ExecuteAsync(criteria);
+        await repository.ExecuteAsync(criteria);
     }
 
-    public async Task SendNotification(List<Ticket> tickets)
+    public void SendMail(List<Ticket> tickets)
     {
+        var listNotification = tickets.GroupBy(x => x.MatchId).Select(n => new NotificationModel
+        {
+            Match = new Match
+            {
+                MatchId = n.Key,
+                HomeId = n.First().HomeId,
+                AwayId = n.First().AwayId,
+                KickOffTime = n.First().KickOffTime,
+                CreatedDate = n.First().CreatedDate,
+                RefDataService = refDataService,
+                IsTest = n.First().IsTest
+            },
+            Tickets = n
+        }).ToList();
+
+        foreach (var item in listNotification)
+        {
+            sendMailService.SendMail(item);
+        }
     }
 }

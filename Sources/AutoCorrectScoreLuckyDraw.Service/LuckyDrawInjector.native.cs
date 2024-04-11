@@ -5,6 +5,7 @@ using Fanex.Caching.Redis;
 using Fanex.Data.Repository;
 using Fanex.Logging;
 using Fanex.Logging.Sentry.RavenClient;
+using Fanex.MailDeliver.MailClient;
 using Fanex.RemotingRef;
 using Fanex.Settlement.Converter.Services;
 using Microsoft.AspNetCore.Http;
@@ -37,6 +38,7 @@ public static class LuckyDrawInjector
         service.AddSingleton<NotificationService, NotificationServiceImp>();
         service.AddSingleton<MessageAnnouncementService, MessageAnnouncementServiceImp>();
         service.AddSingleton<SiteMessageService, SiteMessageServiceImp>();
+        service.AddSingleton<SendMailService, SendMailServiceImp>();
 
         service.AddSingleton<XmlConvertService, XmlConvertServiceImp>();
         service.AddSingleton<IDynamicRepository, DynamicRepository>();
@@ -52,6 +54,9 @@ public static class LuckyDrawInjector
         service.AddSingleton<IRemotingRefService, RemotingRefService>();
         StartUmSetting(configuration);
         StartLogSetting(configuration);
+
+        AppSettings.AppMailId = configuration.GetSection("MailServer:Id").Value;
+        AppSettings.AppMailAddress = configuration.GetSection("MailServer:Address").Value;
     }
 
     private static void ConfigureRedis(this IServiceCollection service, IConfiguration configuration)

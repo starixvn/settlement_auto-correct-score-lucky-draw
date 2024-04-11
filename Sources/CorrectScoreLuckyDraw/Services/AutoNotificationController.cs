@@ -16,12 +16,8 @@ public class AutoNotificationControllerImp(
     {
         var notifications = await notificationService.GetNotification();
         var drawIds = await InsertMessage(notifications);
-
+        notificationService.SendMail(notifications);
         await UpdateNotification(drawIds);
-    }
-
-    private async Task SendMail(List<Ticket> tickets)
-    {
     }
 
     private async Task<List<int>> InsertMessage(List<Ticket> tickets)
@@ -29,15 +25,7 @@ public class AutoNotificationControllerImp(
         var drawIds = new List<int>();
         foreach (var item in tickets)
         {
-            Result result;
-            if (item.Site.Equals(Site.Name))
-            {
-                result = await siteMessageService.SiteIBCIndo(item);
-            }
-            else
-            {
-                result = await siteMessageService.SiteNotIBCIndo(item);
-            }
+            var result = await MessageBySite(item);
 
             if (result.ErrorCode == 0)
             {
@@ -46,6 +34,13 @@ public class AutoNotificationControllerImp(
         }
 
         return drawIds;
+    }
+
+    private async Task<Result> MessageBySite(Ticket item)
+    {
+        return item.Site.Equals(Site.IBCIndo)
+            ? await siteMessageService.SiteIBCIndo(item)
+            : await siteMessageService.SiteNotIBCIndo(item);
     }
 
     private async Task UpdateNotification(IReadOnlyCollection<int> drawIds)

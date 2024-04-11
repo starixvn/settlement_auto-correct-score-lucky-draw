@@ -1,12 +1,15 @@
-﻿namespace CorrectScoreLuckyDraw.Models;
+﻿using CorrectScoreLuckyDraw.Constants;
+using CorrectScoreLuckyDraw.Services;
+
+namespace CorrectScoreLuckyDraw.Models;
 
 public class Match
 {
+    public RefDataService RefDataService { get; set; }
+
     public int MatchId { get; set; }
 
-    public int LeagueId { get; set; }
-
-    public int MinBet { get; set; }
+    public decimal MinBet { get; set; }
 
     public bool IsTest { get; set; }
 
@@ -17,4 +20,14 @@ public class Match
     public int TotalWinner { get; set; }
 
     public decimal TotalPool { get; set; }
+
+    public DateTime CreatedDate { get; set; }
+
+    public DateTime KickOffTime { get; set; }
+
+    public int HomeId { get; set; }
+
+    public int AwayId { get; set; }
+
+    public string TeamName => $"{RefDataService.GetTeamName(HomeId, ContentLanguage.English)} vs {RefDataService.GetTeamName(AwayId, ContentLanguage.English)}";
 }

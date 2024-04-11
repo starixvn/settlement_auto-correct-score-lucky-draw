@@ -1,20 +1,39 @@
-﻿namespace CorrectScoreLuckyDraw.Services;
+﻿using CorrectScoreLuckyDraw.Models;
+using Fanex.MailDeliver.MailClient.Model;
+using Microsoft.Extensions.Options;
+using RazorEngine;
+using RazorEngine.Templating;
+
+namespace CorrectScoreLuckyDraw.Services;
 
 public interface SendMailService
 {
     void SendMail(NotificationModel item);
 }
 
-public class SendMailServiceImp : SendMailService
+public class SendMailServiceImp(IOptions<AppSettingsKey> appSettingsKey) : SendMailService
 {
     public void SendMail(NotificationModel item)
     {
+        string mailTo;
+        string mailCc;
+        if (item.Match.IsTest)
+        {
+            mailTo = appSettingsKey.Value.RecipientEmailTest.To;
+            mailCc = appSettingsKey.Value.RecipientEmailTest.CC;
+        }
+        else
+        {
+            mailTo = appSettingsKey.Value.RecipientEmail.To;
+            mailCc = appSettingsKey.Value.RecipientEmail.CC;
+        }
+
         var mailRecord = new MailRecord
         {
-            MailTo = item.To,
-            MailCc = item.Copy,
+            MailTo = mailTo,
+            MailCc = mailCc,
             Title = "NAP - Settlement System",
-            Subject = Subject(item),
+            Subject = Subject(item.Match),
             Body = MailBody(item)
         };
 
@@ -25,21 +44,14 @@ public class SendMailServiceImp : SendMailService
 
     private static string MailBody(NotificationModel item)
     {
-        var templateKey = "deposit-key";
-        var template = $"{AppDomain.CurrentDomain.BaseDirectory}Templates{Path.DirectorySeparatorChar}deposit-template.cshtml";
-
-        if (item.Type.Equals(EmailType.Credit))
-        {
-            templateKey = "credit-key";
-            template = $"{AppDomain.CurrentDomain.BaseDirectory}Templates{Path.DirectorySeparatorChar}credit-template.cshtml";
-        }
+        const string templateKey = "lucky-draw";
+        var template = $"{AppDomain.CurrentDomain.BaseDirectory}Templates{Path.DirectorySeparatorChar}template.cshtml";
 
         return Engine.Razor.RunCompile(File.ReadAllText(template), templateKey, model: item);
     }
 
-    private static string Subject(NotificationModel item)
+    private static string Subject(Match match)
     {
-        var to = string.Equals(item.Type, EmailType.Credit) ? "MBC" : "Licensee";
-        return $"[Virtual Sports] {item.Action} Ticket Numbers ({to}) -- {item.Action} MatchId: {item.MatchInfo.MatchId} ({item.MatchInfo.SportName})";
+        return $"Euro Correct Score Lucky Draw Winning List - Match ID: {match.MatchId} ({match.TeamName})";
     }
 }

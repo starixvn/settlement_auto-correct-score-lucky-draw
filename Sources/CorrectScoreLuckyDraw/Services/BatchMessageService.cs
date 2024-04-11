@@ -19,8 +19,7 @@ public class BatchMessageServiceImp(
     public async Task<int> GetMessageId(Ticket ticket, string level)
     {
         var criteria = messageAnnouncementService.CreateMessageCriteria(ticket, level);
-        //return await repository.GetAsync<int>(criteria);
-        return 1;
+        return await repository.GetAsync<int>(criteria);
     }
 
     public async Task<Result> UploadBatchMessage(List<MessageItem> items)
