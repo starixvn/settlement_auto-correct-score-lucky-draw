@@ -1,5 +1,5 @@
 <div>- Match: @Model.Match.TeamName</div>
-<div>- MatchID: @Model.Match.MatchId</div>
+<div>- Match ID: @Model.Match.MatchId</div>
 <div>- KO Time (GMT +8): @Model.Match.KickOffTime.ToString("MM/dd/yyyy hh:mm tt")</div>
 <div>- Lucky Draw Date: @Model.Match.CreatedDate.ToString("MM/dd/yyyy")</div>
 <div>- List of winning members:</div>
@@ -32,6 +32,10 @@
     body {
         font-family: tahoma;
         font-size: 12px;
+    }
+
+    div {
+        line-height: 20px;
     }
 
     table {

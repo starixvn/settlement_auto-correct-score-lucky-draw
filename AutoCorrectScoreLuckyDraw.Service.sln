@@ -9,6 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{6A21287A
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{6B9C6640-926A-4458-ABE3-FAE8E2EC6824}"
 	ProjectSection(SolutionItems) = preProject
+		..\nap-settlement-net-core\.dockerignore = ..\nap-settlement-net-core\.dockerignore
 		.gitignore = .gitignore
 		.gitlab-ci.yml = .gitlab-ci.yml
 		Dockerfile = Dockerfile
@@ -19,7 +20,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CorrectScoreLuckyDraw", "So
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CorrectScoreLuckyDraw.UnitTests", "Tests\CorrectScoreLuckyDraw.UnitTests\CorrectScoreLuckyDraw.UnitTests.csproj", "{E2531B4F-8478-458F-82DD-A98BF8EE0706}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoCorrectScoreLuckyDraw.Service", "Sources\AutoCorrectScoreLuckyDraw.Service\AutoCorrectScoreLuckyDraw.Service.csproj", "{EEF634EE-6A9A-479F-9EFF-F739EBCC4125}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutoCorrectScoreLuckyDraw.Service", "Sources\AutoCorrectScoreLuckyDraw.Service\AutoCorrectScoreLuckyDraw.Service.csproj", "{EEF634EE-6A9A-479F-9EFF-F739EBCC4125}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

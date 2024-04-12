@@ -7,107 +7,55 @@ using Microsoft.Extensions.Hosting;
 
 namespace AutoCorrectScoreLuckyDraw.Service.Services;
 
-public class LuckyDrawService : IHostedService
+public class LuckyDrawService(
+    AutoMatchController autoMatchController,
+    AutoNotificationController autoNotificationController,
+    IConfiguration configuration,
+    IMaintenanceService maintenanceService)
+    : BackgroundService
 {
-    private readonly AutoMatchController autoMatchController;
-
-    private readonly AutoNotificationController autoNotificationController;
-
-    private readonly IMaintenanceService maintenanceService;
-
-    private readonly IConfiguration configuration;
-
-    private bool running;
-
     private int counter;
 
-    public LuckyDrawService(
-        AutoMatchController autoMatchController,
-        AutoNotificationController autoNotificationController,
-        IConfiguration configuration,
-        IMaintenanceService maintenanceService)
+    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        this.autoMatchController = autoMatchController;
-        this.autoNotificationController = autoNotificationController;
-        this.configuration = configuration;
-        this.maintenanceService = maintenanceService;
-        InitializeExtraComponent();
+        using PeriodicTimer timer = new(TimeSpan.FromMilliseconds(configuration.GetValue<int>("ServiceInterval")));
+
+        while (await timer.WaitForNextTickAsync(stoppingToken))
+        {
+            await HandleAutoAsync();
+        }
     }
 
-    private static void InitializeExtraComponent()
+    private async Task HandleAutoAsync()
     {
-        TaskScheduler.UnobservedTaskException += TaskSchedulerUnobservedTaskException;
-    }
-
-    private static void TaskSchedulerUnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs e)
-    {
-        e.SetObserved();
-        e.Exception.Handle(exception =>
+        try
+        {
+            if (!maintenanceService.IsMaintenance)
+            {
+                await autoMatchController.Process();
+                await autoNotificationController.Process();
+                HandleGarbageCollector();
+            }
+        }
+        catch (Exception exception)
         {
             var logMessage = new LogMessage(exception.Message)
                 .AddSection("Database Info", DatabaseInfoGetters.GetDbExceptionInfo(exception))
                 .AddSection("Server Info", CommonInfoGetters.GetServerInfo())
                 .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(exception))
                 .ToString();
-            LogService.Error(logMessage);
-            return true;
-        });
-    }
-
-    public async Task StartAsync(CancellationToken cancellationToken)
-    {
-        running = true;
-        //var autoRefundThread = new Thread(ThreadProcess);
-        //autoRefundThread.Start();
-        await ThreadProcess();
-    }
-
-    public Task StopAsync(CancellationToken cancellationToken)
-    {
-        running = false;
-        return Task.CompletedTask;
-    }
-
-    private async Task ThreadProcess()
-    {
-        while (running)
-        {
-            if (!maintenanceService.IsMaintenance)
-            {
-                await MainProcess();
-
-                var interval = configuration.GetSection("ServiceInterval").Value ?? "0";
-
-                Thread.Sleep(int.Parse(interval));
-            }
-        }
-    }
-
-    private async Task MainProcess()
-    {
-        try
-        {
-            await autoMatchController.Process();
-            await autoNotificationController.Process();
-            HandleGarbageCollector();
-        }
-        catch (Exception exception)
-        {
-            LogService.Error("Error from Auto Correct Score Lucky Draw  Service(Soccer):", exception);
+            await LogService.ErrorAsync(logMessage);
         }
     }
 
     private void HandleGarbageCollector()
     {
-        var gcInterval = configuration.GetSection("GarbageCollectorInterval").Value ?? "0";
-        if (counter >= int.Parse(gcInterval))
+        if (counter >= configuration.GetValue<int>("GarbageCollectorInterval"))
         {
             counter = 0;
             GC.WaitForPendingFinalizers();
         }
 
-        var interval = configuration.GetSection("ServiceInterval").Value ?? "0";
-
-        counter += int.Parse(interval);
+        counter += configuration.GetValue<int>("ServiceInterval");
     }
 }

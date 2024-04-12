@@ -1,7 +1,5 @@
-﻿using AutoMapper;
-using CorrectScoreLuckyDraw.Services;
+﻿using CorrectScoreLuckyDraw.Services;
 using Fanex.Caching;
-using Fanex.Caching.Redis;
 using Fanex.Data.Repository;
 using Fanex.Logging;
 using Fanex.Logging.Sentry.RavenClient;
@@ -24,7 +22,6 @@ public static class LuckyDrawInjector
 {
     public static void InitializeServices(this IServiceCollection service, IConfiguration configuration)
     {
-        ConfigureAutoMapper(service);
         service.AddTransient<IMaintenanceService, MaintenanceServiceImp>();
         service.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
@@ -47,7 +44,6 @@ public static class LuckyDrawInjector
         service.AddSingleton<IUMRestClient, UMRestClient>();
         service.AddSingleton<ONEbook.UM.Services.IMaintenanceService, ONEbook.UM.Services.MaintenanceService>();
         service.AddMemoryCache();
-        service.ConfigureRedis(configuration);
         RefDataTypeContainer
             .ConnectTo(new Uri(configuration.GetSection("Fanex.RemotingRef.Service.Url").Value))
             .FromApplication("Settlement");
@@ -57,12 +53,6 @@ public static class LuckyDrawInjector
 
         AppSettings.AppMailId = configuration.GetSection("MailServer:Id").Value;
         AppSettings.AppMailAddress = configuration.GetSection("MailServer:Address").Value;
-    }
-
-    private static void ConfigureRedis(this IServiceCollection service, IConfiguration configuration)
-    {
-        service.AddSingleton<ICacheService, CacheService>();
-        service.AddRedisCache(configuration.GetSection("Fanex.Caching.Redis"));
     }
 
     private static void StartUmSetting(IConfiguration configuration)
@@ -87,16 +77,5 @@ public static class LuckyDrawInjector
         logEngine.Add(new SentryLogging(sentryEngineOptions));
 
         LogManager.SetDefaultLogCategory(configuration.GetSection("SiteCategory").Value).Use(logEngine);
-    }
-
-    private static void ConfigureAutoMapper(IServiceCollection service)
-    {
-        var mapperConfig = new MapperConfiguration(mc =>
-        {
-            //mc.AddProfile(typeof(ScaleOutMappingProfile));
-        });
-
-        var mapper = mapperConfig.CreateMapper();
-        service.AddSingleton(mapper);
     }
 }
