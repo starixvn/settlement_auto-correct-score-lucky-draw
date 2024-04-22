@@ -19,4 +19,6 @@ public class MessageItem
 
     [XmlAttribute]
     public string TargetName { get; set; }
+
+    [XmlAttribute] public string BetTransId { get; set; } = "Null";
 }
