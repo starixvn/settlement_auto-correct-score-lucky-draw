@@ -1,10 +1,17 @@
-﻿namespace CorrectScoreLuckyDraw.Models;
+﻿using CorrectScoreLuckyDraw.Constants;
+using CorrectScoreLuckyDraw.Services;
+
+namespace CorrectScoreLuckyDraw.Models;
 
 public class Ticket
 {
+    public RefDataService RefDataService { get; set; }
+
     public int DrawId { get; set; }
 
     public int MatchId { get; set; }
+
+    public int LeagueId { get; set; }
 
     public int TypeId { get; set; }
 
@@ -43,4 +50,35 @@ public class Ticket
     public DateTime CreatedDate { get; set; }
 
     public bool IsTest { get; set; }
+
+    public string TeamName => $"{RefDataService.GetTeamName(HomeId, ContentLanguage.English)} -vs- {RefDataService.GetTeamName(AwayId, ContentLanguage.English)}";
+
+    public string TeamNameCh => GetTeamName(ContentLanguage.Cantonese);
+
+    public string TeamNameCs => GetTeamName(ContentLanguage.Mandarin);
+
+    public string TeamNameIndo => GetTeamName(ContentLanguage.Indo);
+
+    public string LeagueName => RefDataService.GetLeagueName(LeagueId, ContentLanguage.English);
+
+    public string LeagueNameCh => GetLeagueName(ContentLanguage.Cantonese);
+
+    public string LeagueNameCs => GetLeagueName(ContentLanguage.Mandarin);
+
+    public string LeagueNameIndo => GetLeagueName(ContentLanguage.Indo);
+
+    private string GetTeamName(string languageCode)
+    {
+        var home = RefDataService.GetTeamName(HomeId, languageCode);
+        var away = RefDataService.GetTeamName(AwayId, languageCode);
+
+        return (string.IsNullOrEmpty(home) || string.IsNullOrEmpty(away)) ? TeamName : $"{home} -vs- {away}";
+    }
+
+    private string GetLeagueName(string languageCode)
+    {
+        var value = RefDataService.GetLeagueName(LeagueId, languageCode);
+
+        return (string.IsNullOrEmpty(value)) ? LeagueName : value;
+    }
 }

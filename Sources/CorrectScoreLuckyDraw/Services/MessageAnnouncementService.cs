@@ -11,10 +11,11 @@ public interface MessageAnnouncementService
     MessageItem CreateMessageItem(Ticket ticket, int messageId, string level);
 }
 
-public class MessageAnnouncementServiceImp : MessageAnnouncementService
+public class MessageAnnouncementServiceImp(RefDataService refDataService) : MessageAnnouncementService
 {
     public InsertMessageCriteria CreateMessageCriteria(Ticket ticket, string level)
     {
+        ticket.RefDataService = refDataService;
         if (!ticket.Site.Equals(Site.IBCIndo))
         {
             ticket.ExpiredDate = ticket.ExpiredDate.AddDays(1);
@@ -33,15 +34,37 @@ public class MessageAnnouncementServiceImp : MessageAnnouncementService
     private static string CreateMessageContent(Ticket ticket, string languageCode, string level)
     {
         var template = string.IsNullOrEmpty(level) ? GetTemplate(languageCode) : GetTemplate(level, languageCode);
+        var leagueName = GetLeagueName(ticket, languageCode);
+        var teamName = GetTeamName(ticket, languageCode);
 
         return template
-            .Replace("@email", "email@test.com")
+            .Replace("@team_vs_team", teamName)
+            .Replace("@league_name", leagueName)
+            .Replace("@email", "support@ibcbet.com")
             .Replace("@member_username", ticket.Username)
             .Replace("@currency_name", ticket.CurrencyName)
             .Replace("@prize_amount", ticket.PrizeAmount.ToString("#,0"))
             .Replace("@verification_code", ticket.VerificationCode)
             .Replace("@expired_date", ticket.ExpiredDate.ToString("dd/MM/yyyy"));
     }
+
+    private static string GetTeamName(Ticket ticket, string languageCode) =>
+        languageCode switch
+        {
+            ContentLanguage.Cantonese => ticket.TeamNameCh,
+            ContentLanguage.Mandarin => ticket.TeamNameCs,
+            ContentLanguage.Indo => ticket.TeamNameIndo,
+            _ => ticket.TeamName,
+        };
+
+    private static string GetLeagueName(Ticket ticket, string languageCode) =>
+        languageCode switch
+        {
+            ContentLanguage.Cantonese => ticket.LeagueNameCh,
+            ContentLanguage.Mandarin => ticket.LeagueNameCs,
+            ContentLanguage.Indo => ticket.LeagueNameIndo,
+            _ => ticket.LeagueName,
+        };
 
     private static string GetTemplate(string languageCode) => (languageCode) switch
     {
