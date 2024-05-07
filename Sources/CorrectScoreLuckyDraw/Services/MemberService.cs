@@ -40,11 +40,8 @@ public class MemberServiceImp(IDynamicRepository repository) : MemberService
 
     private static decimal GetPoolAmount(Match match)
     {
-        if (match.TotalPool < match.MinPool)
-        {
-            return match.MinPool;
-        }
+        var minPool = match.TotalPool + match.MinPool;
 
-        return match.TotalPool > match.MaxPool ? match.MaxPool : match.TotalPool;
+        return minPool <= match.MaxPool ? minPool : match.MaxPool;
     }
 }

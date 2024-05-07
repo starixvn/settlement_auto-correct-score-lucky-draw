@@ -52,6 +52,6 @@ public class SendMailServiceImp(IOptions<AppSettingsKey> appSettingsKey) : SendM
 
     private static string Subject(Match match)
     {
-        return $"Euro Correct Score Lucky Draw Winning List - Match ID: {match.MatchId} ({match.TeamName})";
+        return $"Correct Score Lucky Draw Winning List - Match ID: {match.MatchId} ({match.TeamName})";
     }
 }
