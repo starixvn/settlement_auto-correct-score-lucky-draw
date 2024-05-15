@@ -22,6 +22,8 @@ public class InsertMessageCriteria : NonQueryCommand
 
     public short MsgType { get; set; } = 1;
 
+    public int MsgContentsType { get; set; } = 112;
+
     public int Creator { get; set; } = Constants.Creator.Id;
 
     public string CreatorName { get; set; } = string.Empty;
