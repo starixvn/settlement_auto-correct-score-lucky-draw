@@ -25,7 +25,7 @@ public class NotificationServiceImp(
 
     public async Task UpdateNotification(string drawIdList)
     {
-        var criteria = new UpdateLuckyDrawNotificationCriteria()
+        var criteria = new UpdateLuckyDrawNotificationCriteria
         {
             DrawIdList = drawIdList
         };

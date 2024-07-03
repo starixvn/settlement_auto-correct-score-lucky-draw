@@ -7,7 +7,7 @@ public static class Action
 
 public static class Creator
 {
-    public const int Id = 10278938;
+    public const int Id = 10_278_938;
 }
 
 public static class Site

@@ -74,35 +74,65 @@ public class MessageAnnouncementServiceImp(RefDataService refDataService) : Mess
         _ => string.Empty,
     };
 
-    private static string GetTemplate(string level, string languageCode) => (level, languageCode) switch
+    private static string GetTemplate(string level, string languageCode)
     {
-        (Levels.Member, ContentLanguage.English) => IbcIndoMember.ContentEng,
-        (Levels.Member, ContentLanguage.Cantonese) => IbcIndoMember.ContentCantonese,
-        (Levels.Member, ContentLanguage.Mandarin) => IbcIndoMember.ContentMandarin,
-        (Levels.Member, ContentLanguage.Indo) => IbcIndoMember.ContentIndo,
+        return level switch
+        {
+            Levels.Member => GetTemplateForMember(languageCode),
+            Levels.Agent => GetTemplateForAgent(languageCode),
+            Levels.Master => GetTemplateForMaster(languageCode),
+            Levels.Super => GetTemplateForSuper(languageCode),
+            _ => string.Empty
+        };
+    }
 
-        (Levels.Agent, ContentLanguage.English) or
-        (Levels.Master, ContentLanguage.English) or
-        (Levels.Super, ContentLanguage.English)
-            => IbcIndoSMA.ContentEng,
+    private static string GetTemplateForMember(string languageCode)
+    {
+        return languageCode switch
+        {
+            ContentLanguage.English => IbcIndoMember.ContentEng,
+            ContentLanguage.Cantonese => IbcIndoMember.ContentCantonese,
+            ContentLanguage.Mandarin => IbcIndoMember.ContentMandarin,
+            ContentLanguage.Indo => IbcIndoMember.ContentIndo,
+            _ => string.Empty
+        };
+    }
 
-        (Levels.Agent, ContentLanguage.Cantonese) or
-        (Levels.Master, ContentLanguage.Cantonese) or
-        (Levels.Super, ContentLanguage.Cantonese)
-            => IbcIndoSMA.ContentCantonese,
+    private static string GetTemplateForAgent(string languageCode)
+    {
+        return languageCode switch
+        {
+            ContentLanguage.English => IbcIndoSMA.ContentEng,
+            ContentLanguage.Cantonese => IbcIndoSMA.ContentCantonese,
+            ContentLanguage.Mandarin => IbcIndoSMA.ContentMandarin,
+            ContentLanguage.Indo => IbcIndoSMA.ContentIndo,
+            _ => string.Empty
+        };
+    }
 
-        (Levels.Agent, ContentLanguage.Mandarin) or
-        (Levels.Master, ContentLanguage.Mandarin) or
-        (Levels.Super, ContentLanguage.Mandarin)
-            => IbcIndoSMA.ContentMandarin,
+    private static string GetTemplateForMaster(string languageCode)
+    {
+        return languageCode switch
+        {
+            ContentLanguage.English => IbcIndoSMA.ContentEng,
+            ContentLanguage.Cantonese => IbcIndoSMA.ContentCantonese,
+            ContentLanguage.Mandarin => IbcIndoSMA.ContentMandarin,
+            ContentLanguage.Indo => IbcIndoSMA.ContentIndo,
+            _ => string.Empty
+        };
+    }
 
-        (Levels.Agent, ContentLanguage.Indo) or
-        (Levels.Master, ContentLanguage.Indo) or
-        (Levels.Super, ContentLanguage.Indo)
-            => IbcIndoSMA.ContentIndo,
-
-        _ => string.Empty,
-    };
+    private static string GetTemplateForSuper(string languageCode)
+    {
+        return languageCode switch
+        {
+            ContentLanguage.English => IbcIndoSMA.ContentEng,
+            ContentLanguage.Cantonese => IbcIndoSMA.ContentCantonese,
+            ContentLanguage.Mandarin => IbcIndoSMA.ContentMandarin,
+            ContentLanguage.Indo => IbcIndoSMA.ContentIndo,
+            _ => string.Empty
+        };
+    }
 
     public MessageItem CreateMessageItem(Ticket ticket, int messageId, string level)
     {
