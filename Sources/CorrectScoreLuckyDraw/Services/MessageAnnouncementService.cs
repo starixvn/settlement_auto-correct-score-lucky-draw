@@ -1,4 +1,6 @@
 ﻿using Core.Constants;
+using Core.Criteria;
+using Core.Models;
 using Core.Services;
 using CorrectScoreLuckyDraw.Constants;
 using CorrectScoreLuckyDraw.Criteria;
@@ -8,14 +10,14 @@ namespace CorrectScoreLuckyDraw.Services;
 
 public interface MessageAnnouncementService
 {
-	InsertMessageCriteria CreateMessageCriteria(Ticket ticket, string level);
+	MsgInsCriteria CreateMessageCriteria(Ticket ticket, string level);
 
 	MessageItem CreateMessageItem(Ticket ticket, int messageId, string level);
 }
 
 public class MessageAnnouncementServiceImp(RefDataService refDataService) : MessageAnnouncementService
 {
-	public InsertMessageCriteria CreateMessageCriteria(Ticket ticket, string level)
+	public MsgInsCriteria CreateMessageCriteria(Ticket ticket, string level)
 	{
 		ticket.RefDataService = refDataService;
 		if (!ticket.Site.Equals(Site.IBCIndo))
@@ -23,13 +25,15 @@ public class MessageAnnouncementServiceImp(RefDataService refDataService) : Mess
 			ticket.ExpiredDate = ticket.ExpiredDate.AddDays(1);
 		}
 
-		return new InsertMessageCriteria
+		return new MsgInsCriteria
 		{
 			ContentEng = CreateMessageContent(ticket, ContentLanguage.English, level),
 			ContentCh = CreateMessageContent(ticket, ContentLanguage.Cantonese, level),
 			ContentCs = CreateMessageContent(ticket, ContentLanguage.Mandarin, level),
 			ContentId = CreateMessageContent(ticket, ContentLanguage.Indo, level),
 			MatchId = ticket.MatchId,
+			MsgType = 1,
+			MsgContentsType = 112
 		};
 	}
 

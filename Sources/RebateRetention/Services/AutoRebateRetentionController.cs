@@ -15,37 +15,45 @@ public class AutoRebateRetentionControllerImp : AutoRebateRetentionController
 	private readonly SabaWalletService sabaWalletService;
 	private readonly IMessageService messageService;
 	private readonly GenerateMessageService generateMessageService;
+	private readonly SabaProgramStatusService sabaProgramStatusService;
 
 	public AutoRebateRetentionControllerImp(
 		SabaWalletService sabaWalletService,
 		IMessageService messageService,
-		GenerateMessageService generateMessageService)
+		GenerateMessageService generateMessageService,
+		SabaProgramStatusService sabaProgramStatusService)
 	{
 		this.sabaWalletService = sabaWalletService;
 		this.messageService = messageService;
 		this.generateMessageService = generateMessageService;
+		this.sabaProgramStatusService = sabaProgramStatusService;
 	}
 
 	public async Task Process()
 	{
-		var tickets = (await sabaWalletService.GetSabaWalletTickets()).ToList();
+		var tickets = await sabaWalletService.GetSabaWalletTickets();
 
 		foreach (var item in tickets.GroupBy(x => x.ProgramId))
 		{
 			if (IsExistMember(item))
 			{
-				var messageId = await CreateMsg(item.First(), Levels.Member);
-				var messageItems = generateMessageService.CreateMemberMessageItems(item, messageId);
-				await messageService.UploadBatchMessage(messageItems);
+				await HandleInsSabaMsgForLevel(item, Levels.Member);
 			}
 
 			if (IsExistSMA(item))
 			{
-				var messageId = await CreateMsg(item.First(), Levels.Agent);
-				var messageItems = generateMessageService.CreateSMAMessageItems(item, messageId);
-				await messageService.UploadBatchMessage(messageItems);
+				await HandleInsSabaMsgForLevel(item, Levels.Agent);
 			}
+
+			await sabaProgramStatusService.UpdateSabaProgramStatus(item.First().SId);
 		}
+	}
+
+	private async Task HandleInsSabaMsgForLevel(IGrouping<int, SabaWalletTicket> item, string level)
+	{
+		var messageId = await CreateMsg(item.First(), level);
+		var messageItems = generateMessageService.CreateMessageItems(item, messageId, level).ToList();
+		await messageService.UploadBatchMessage(messageItems);
 	}
 
 	private async Task<int> CreateMsg(SabaWalletTicket ticket, string level)
@@ -54,6 +62,7 @@ public class AutoRebateRetentionControllerImp : AutoRebateRetentionController
 		{
 			MsgContentsType = 200,
 			MsgType = 1,
+			Creator = Creator.Id,
 			ContentEng = generateMessageService.CreateMessageContent(ticket, ContentLanguage.English, level),
 			ContentCh = generateMessageService.CreateMessageContent(ticket, ContentLanguage.Cantonese, level),
 			ContentCs = generateMessageService.CreateMessageContent(ticket, ContentLanguage.Mandarin, level),

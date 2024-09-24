@@ -1,6 +1,6 @@
 ﻿using System.Xml.Serialization;
 
-namespace CorrectScoreLuckyDraw.Models;
+namespace Core.Models;
 
 [XmlRoot("Messages")]
 public class Message

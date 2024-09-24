@@ -1,4 +1,5 @@
-﻿using Fanex.Data.Repository;
+﻿using Core.Constants;
+using Fanex.Data.Repository;
 
 namespace Core.Criteria;
 
@@ -6,7 +7,7 @@ public class UploadBatchMessageCriteria : NonQueryCommand
 {
 	public string XMLMessage { get; set; }
 
-	public int CreatorId { get; set; }
+	public int CreatorId { get; set; } = Creator.Id;
 
 	public int ErrorCode { get; set; }
 

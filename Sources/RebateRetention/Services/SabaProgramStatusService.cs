@@ -3,12 +3,12 @@ using RebateRetention.Criteria;
 
 namespace RebateRetention.Services;
 
-internal interface SabaProgramStatusService
+public interface SabaProgramStatusService
 {
-	Task UpdateSabaProgramStatus(SabaProgramStatusUpdCriteria criteria);
+	Task UpdateSabaProgramStatus(short sId);
 }
 
-internal class SabaProgramStatusServiceImp : SabaProgramStatusService
+public class SabaProgramStatusServiceImp : SabaProgramStatusService
 {
 	private readonly IDynamicRepository repository;
 
@@ -17,8 +17,14 @@ internal class SabaProgramStatusServiceImp : SabaProgramStatusService
 		this.repository = repository;
 	}
 
-	public async Task UpdateSabaProgramStatus(SabaProgramStatusUpdCriteria criteria)
+	public async Task UpdateSabaProgramStatus(short sId)
 	{
+		var criteria = new SabaProgramStatusUpdCriteria
+		{
+			SId = sId,
+			IsNotified = true
+		};
+
 		await repository.ExecuteAsync(criteria);
 	}
 }

@@ -1,12 +1,8 @@
-﻿using Core.Services;
-
-namespace RebateRetention.Models;
+﻿namespace RebateRetention.Models;
 
 public class SabaWalletTicket
 {
-	public RefDataService RefDataService { get; set; }
-
-	public int SId { get; set; }
+	public short SId { get; set; }
 	public int ProgramId { get; set; }
 
 	public int CustId { get; set; }

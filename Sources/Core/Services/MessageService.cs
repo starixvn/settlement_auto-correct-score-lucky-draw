@@ -30,7 +30,7 @@ public class MessageService : IMessageService
 
 	public async Task<Result> UploadBatchMessage(List<MessageItem> items)
 	{
-		var message = new Msg
+		var message = new Message
 		{
 			Items = items,
 		};

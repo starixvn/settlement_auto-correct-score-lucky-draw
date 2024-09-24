@@ -8,9 +8,7 @@ namespace RebateRetention.Services;
 
 public interface GenerateMessageService
 {
-	IEnumerable<MessageItem> CreateMemberMessageItems(IEnumerable<SabaWalletTicket> tickets, int messageId);
-
-	IEnumerable<MessageItem> CreateSMAMessageItems(IEnumerable<SabaWalletTicket> tickets, int messageId);
+	IEnumerable<MessageItem> CreateMessageItems(IEnumerable<SabaWalletTicket> tickets, int messageId, string level);
 
 	string CreateMessageContent(SabaWalletTicket ticket, string languageCode, string level);
 }
@@ -24,8 +22,15 @@ public class GenerateMessageServiceImp : GenerateMessageService
 		this.refDataService = refDataService;
 	}
 
-	public IEnumerable<MessageItem> CreateSMAMessageItems(IEnumerable<SabaWalletTicket> tickets, int messageId)
+	public IEnumerable<MessageItem> CreateMessageItems(IEnumerable<SabaWalletTicket> tickets, int messageId, string level)
 	{
+		var groupMembers = GenerateMessageItems(tickets, ticket => ticket.CustId, ticket => ticket.Username, messageId);
+
+		if (level == Levels.Member)
+		{
+			return groupMembers;
+		}
+
 		var groupAgent = GenerateMessageItems(tickets, ticket => ticket.AgentId, ticket => ticket.AgentUsername, messageId);
 		var groupMaster = GenerateMessageItems(tickets, ticket => ticket.MasterId, ticket => ticket.MasterUsername, messageId);
 		var groupSuper = GenerateMessageItems(tickets, ticket => ticket.SuperId, ticket => ticket.SuperUsername, messageId);
@@ -33,13 +38,6 @@ public class GenerateMessageServiceImp : GenerateMessageService
 		return groupAgent
 			.Concat(groupMaster)
 			.Concat(groupSuper);
-	}
-
-	public IEnumerable<MessageItem> CreateMemberMessageItems(IEnumerable<SabaWalletTicket> tickets, int messageId)
-	{
-		var groupMembers = GenerateMessageItems(tickets, ticket => ticket.CustId, ticket => ticket.Username, messageId);
-
-		return groupMembers;
 	}
 
 	public string CreateMessageContent(SabaWalletTicket ticket, string languageCode, string level)
@@ -74,8 +72,8 @@ public class GenerateMessageServiceImp : GenerateMessageService
 	{
 		return (programId, level) switch
 		{
-			(1, Levels.Member) => GetTemplateForMember(1, languageCode),
-			(1, Levels.Agent) => GetTemplateForSMA(1, languageCode),
+			(_, Levels.Member) => GetTemplateForMember(1, languageCode),
+			(_, Levels.Agent) => GetTemplateForSMA(1, languageCode),
 			_ => string.Empty
 		};
 	}

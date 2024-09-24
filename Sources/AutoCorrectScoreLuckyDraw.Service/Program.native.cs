@@ -14,7 +14,7 @@ builder.Services.Configure<AppSettingsKey>(builder.Configuration);
 
 builder.Services.InitializeServices(builder.Configuration);
 
-//builder.Services.AddHostedService<LuckyDrawService>();
+builder.Services.AddHostedService<LuckyDrawService>();
 
 builder.Services.AddHostedService<RebateRetentionService>();
 
