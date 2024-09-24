@@ -14,13 +14,15 @@ builder.Services.Configure<AppSettingsKey>(builder.Configuration);
 
 builder.Services.InitializeServices(builder.Configuration);
 
-builder.Services.AddHostedService<LuckyDrawService>();
+//builder.Services.AddHostedService<LuckyDrawService>();
+
+builder.Services.AddHostedService<RebateRetentionService>();
 
 var app = builder.Build();
 
 app.Run(async context =>
 {
-    await context.Response.WriteAsync("OK");
+	await context.Response.WriteAsync("OK");
 });
 
 app.Run();

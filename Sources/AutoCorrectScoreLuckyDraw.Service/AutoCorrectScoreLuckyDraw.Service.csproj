@@ -63,6 +63,7 @@
 	</ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CorrectScoreLuckyDraw\CorrectScoreLuckyDraw.csproj" />
+    <ProjectReference Include="..\RebateRetention\RebateRetention.csproj" />
   </ItemGroup>
 
   <ItemGroup>
