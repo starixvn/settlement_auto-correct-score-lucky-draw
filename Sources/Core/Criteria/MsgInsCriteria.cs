@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Fanex.Data;
+﻿using Fanex.Data;
 using Fanex.Data.Repository;
-using Microsoft.VisualBasic;
 
 namespace Core.Criteria;
 
@@ -14,16 +8,16 @@ public class MsgInsCriteria : NonQueryCommand
 	public int? MessageId { get; set; }
 
 	[SpParam(SqlParamName = "Content_en")]
-	public string ContentEng { get; set; } = string.Empty;
+	public string ContentEng { get; set; }
 
 	[SpParam(SqlParamName = "Content_ch")]
-	public string ContentCh { get; set; } = string.Empty;
+	public string ContentCh { get; set; }
 
 	[SpParam(SqlParamName = "Content_cs")]
-	public string ContentCs { get; set; } = string.Empty;
+	public string ContentCs { get; set; }
 
 	[SpParam(SqlParamName = "Content_id")]
-	public string ContentId { get; set; } = string.Empty;
+	public string ContentId { get; set; }
 
 	public int? MatchId { get; set; }
 

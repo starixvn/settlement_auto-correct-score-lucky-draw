@@ -10,6 +10,7 @@ public static class Injector
 		services.AddSingleton<AutoRebateRetentionController, AutoRebateRetentionControllerImp>();
 		services.AddSingleton<SabaWalletService, SabaWalletServiceImp>();
 		services.AddSingleton<SabaProgramStatusService, SabaProgramStatusServiceImp>();
+		services.AddSingleton<GenerateMessageService, GenerateMessageServiceImp>();
 
 		return services;
 	}

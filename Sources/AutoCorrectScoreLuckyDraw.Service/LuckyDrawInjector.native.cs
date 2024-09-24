@@ -25,6 +25,7 @@ public static class LuckyDrawInjector
 	public static void InitializeServices(this IServiceCollection service, IConfiguration configuration)
 	{
 		service.AddTransient<IMaintenanceService, MaintenanceServiceImp>();
+		service.AddSingleton<IMessageService, MessageService>();
 		service.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 		service.AddSingleton<AutoMatchController, AutoMatchControllerImp>();

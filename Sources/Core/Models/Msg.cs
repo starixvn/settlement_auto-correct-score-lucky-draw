@@ -12,6 +12,9 @@ public class Msg
 public class MessageItem
 {
 	[XmlAttribute]
+	public int MessageId { get; set; }
+
+	[XmlAttribute]
 	public int TargetId { get; set; }
 
 	[XmlAttribute]

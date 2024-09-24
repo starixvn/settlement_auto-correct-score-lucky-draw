@@ -1,11 +1,14 @@
-﻿namespace RebateRetention.Models;
+﻿using Core.Services;
+
+namespace RebateRetention.Models;
 
 public class SabaWalletTicket
 {
+	public RefDataService RefDataService { get; set; }
+
 	public int SId { get; set; }
 	public int ProgramId { get; set; }
 
-	public string ProgramName => "Euro";
 	public int CustId { get; set; }
 
 	public string Username { get; set; }
@@ -21,4 +24,6 @@ public class SabaWalletTicket
 	public int SuperId { get; set; }
 
 	public string SuperUsername { get; set; }
+
+	public long TransId { get; set; }
 }
