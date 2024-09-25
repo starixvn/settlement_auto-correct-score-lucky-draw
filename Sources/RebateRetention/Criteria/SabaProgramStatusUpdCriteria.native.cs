@@ -7,7 +7,7 @@ using Fanex.Data.Repository;
 
 namespace RebateRetention.Criteria;
 
-internal class SabaProgramStatusUpdCriteria : INonQueryCommand
+public class SabaProgramStatusUpdCriteria : INonQueryCommand
 {
 	public short SId { get; set; }
 	public bool IsNotified { get; set; }

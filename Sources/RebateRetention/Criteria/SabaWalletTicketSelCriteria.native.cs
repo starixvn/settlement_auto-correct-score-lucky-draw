@@ -2,7 +2,7 @@
 
 namespace RebateRetention.Criteria;
 
-internal class SabaWalletTicketSelCriteria : CriteriaBase
+public class SabaWalletTicketSelCriteria : CriteriaBase
 {
 	public override string GetSettingKey() => "NAP_SabaWalletTicket_Notification_Sel";
 

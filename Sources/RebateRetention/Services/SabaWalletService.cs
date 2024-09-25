@@ -9,7 +9,7 @@ public interface SabaWalletService
 	Task<IEnumerable<SabaWalletTicket>> GetSabaWalletTickets();
 }
 
-internal class SabaWalletServiceImp : SabaWalletService
+public class SabaWalletServiceImp : SabaWalletService
 {
 	private readonly IDynamicRepository repository;
 
