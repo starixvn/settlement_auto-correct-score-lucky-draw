@@ -8,7 +8,7 @@ public static class Injector
 	public static IServiceCollection AddRebateRetention(this IServiceCollection services)
 	{
 		services.AddSingleton<AutoRebateRetentionController, AutoRebateRetentionControllerImp>();
-		services.AddSingleton<SabaWalletService, SabaWalletService>();
+		services.AddSingleton<SabaWalletService, SabaWalletServiceImp>();
 		services.AddSingleton<SabaProgramStatusService, SabaProgramStatusServiceImp>();
 		services.AddSingleton<GenerateMessageService, GenerateMessageServiceImp>();
 

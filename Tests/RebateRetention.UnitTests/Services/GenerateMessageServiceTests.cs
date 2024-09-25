@@ -1,7 +1,5 @@
 ﻿using Core.Constants;
 using Core.Services;
-using Fanex.Data.Repository;
-using Fanex.Settlement.Converter.Services;
 using NSubstitute;
 using RebateRetention.Constants;
 using RebateRetention.Models;
@@ -45,10 +43,7 @@ public class GenerateMessageServiceTests
 	}
 
 	[Theory]
-	[InlineData(Levels.Member, ContentLanguage.English, MsgContent.MemberEng)]
-	[InlineData(Levels.Member, ContentLanguage.Mandarin, MsgContent.MemberMandarin)]
-	[InlineData(Levels.Agent, ContentLanguage.English, MsgContent.SMAEng)]
-	[InlineData(Levels.Agent, ContentLanguage.Cantonese, MsgContent.SMACantonese)]
+	[MemberData(nameof(CreateMessageContentInputData))]
 	public void CreateMessageContent_ShouldReturnCorrectTemplateBasedOnInputs(string level, string languageCode, string expectedTemplate)
 	{
 		// Arrange
@@ -166,5 +161,15 @@ public class GenerateMessageServiceTests
 				SuperUsername = "Super2"
 			}
 		};
+	}
+
+	public static IEnumerable<object[]> CreateMessageContentInputData()
+	{
+		return [
+			[Levels.Member, ContentLanguage.English, MsgContent.MemberEng],
+			[Levels.Member, ContentLanguage.Mandarin, MsgContent.MemberMandarin],
+			[Levels.Agent, ContentLanguage.English, MsgContent.SMAEng],
+			[Levels.Agent, ContentLanguage.Cantonese, MsgContent.SMACantonese]
+		];
 	}
 }
