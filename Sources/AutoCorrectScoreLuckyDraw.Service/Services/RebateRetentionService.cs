@@ -13,6 +13,7 @@ public class RebateRetentionService : BackgroundService
 	private readonly IConfiguration configuration;
 	private readonly IMaintenanceService maintenanceService;
 	private readonly AutoRebateRetentionController autoRebateRetentionController;
+	private int counter;
 
 	public RebateRetentionService(
 		IConfiguration configuration,
@@ -57,12 +58,12 @@ public class RebateRetentionService : BackgroundService
 
 	private void HandleGarbageCollector()
 	{
-		//if (counter >= configuration.GetValue<int>("GarbageCollectorInterval"))
-		//{
-		//	counter = 0;
-		//	GC.WaitForPendingFinalizers();
-		//}
+		if (counter >= configuration.GetValue<int>("GarbageCollectorInterval"))
+		{
+			counter = 0;
+			GC.WaitForPendingFinalizers();
+		}
 
-		//counter += configuration.GetValue<int>("ServiceInterval");
+		counter += configuration.GetValue<int>("ServiceInterval");
 	}
 }

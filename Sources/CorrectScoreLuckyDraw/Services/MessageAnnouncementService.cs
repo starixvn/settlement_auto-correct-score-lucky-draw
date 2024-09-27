@@ -3,7 +3,6 @@ using Core.Criteria;
 using Core.Models;
 using Core.Services;
 using CorrectScoreLuckyDraw.Constants;
-using CorrectScoreLuckyDraw.Criteria;
 using CorrectScoreLuckyDraw.Models;
 
 namespace CorrectScoreLuckyDraw.Services;
