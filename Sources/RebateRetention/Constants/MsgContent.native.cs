@@ -1,8 +1,4 @@
-﻿using System.Drawing;
-using System.Threading.Tasks;
-using System;
-
-namespace RebateRetention.Constants;
+﻿namespace RebateRetention.Constants;
 
 public static class MsgContent
 {
