@@ -48,7 +48,7 @@ public class AutoRebateRetentionControllerImp(
     {
         var msgInsCriteria = new MsgInsCriteria
         {
-            MsgContentsType = 200,
+            MsgContentsType = 100,
             MsgType = 1,
             Creator = Creator.Id,
             ContentEng = generateMessageService.CreateMessageContent(ticket, ContentLanguage.English, level),
