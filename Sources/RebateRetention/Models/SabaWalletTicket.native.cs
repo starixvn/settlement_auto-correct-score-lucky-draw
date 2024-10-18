@@ -2,7 +2,7 @@
 
 public class SabaWalletTicket
 {
-    public short SId { get; set; }
+    public int SId { get; set; }
     public int ProgramId { get; set; }
 
     public int CustId { get; set; }

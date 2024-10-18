@@ -5,12 +5,12 @@ namespace RebateRetention.Services;
 
 public interface SabaProgramStatusService
 {
-    Task UpdateSabaProgramStatus(short sId);
+    Task UpdateSabaProgramStatus(int sId);
 }
 
 public class SabaProgramStatusServiceImp(IDynamicRepository repository) : SabaProgramStatusService
 {
-    public async Task UpdateSabaProgramStatus(short sId)
+    public async Task UpdateSabaProgramStatus(int sId)
     {
         var criteria = new SabaProgramStatusUpdCriteria
         {
