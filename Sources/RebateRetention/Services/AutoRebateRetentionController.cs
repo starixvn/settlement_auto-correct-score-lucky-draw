@@ -7,76 +7,64 @@ namespace RebateRetention.Services;
 
 public interface AutoRebateRetentionController
 {
-	Task Process();
+    Task Process();
 }
 
-public class AutoRebateRetentionControllerImp : AutoRebateRetentionController
+public class AutoRebateRetentionControllerImp(
+    SabaWalletService sabaWalletService,
+    IMessageService messageService,
+    GenerateMessageService generateMessageService,
+    SabaProgramStatusService sabaProgramStatusService)
+    : AutoRebateRetentionController
 {
-	private readonly SabaWalletService sabaWalletService;
-	private readonly IMessageService messageService;
-	private readonly GenerateMessageService generateMessageService;
-	private readonly SabaProgramStatusService sabaProgramStatusService;
+    public async Task Process()
+    {
+        var tickets = await sabaWalletService.GetSabaWalletTickets();
 
-	public AutoRebateRetentionControllerImp(
-		SabaWalletService sabaWalletService,
-		IMessageService messageService,
-		GenerateMessageService generateMessageService,
-		SabaProgramStatusService sabaProgramStatusService)
-	{
-		this.sabaWalletService = sabaWalletService;
-		this.messageService = messageService;
-		this.generateMessageService = generateMessageService;
-		this.sabaProgramStatusService = sabaProgramStatusService;
-	}
+        foreach (var item in tickets.GroupBy(x => x.ProgramId))
+        {
+            if (IsExistMember(item))
+            {
+                await HandleInsSabaMsgForLevel(item, Levels.Member);
+            }
 
-	public async Task Process()
-	{
-		var tickets = await sabaWalletService.GetSabaWalletTickets();
+            if (IsExistSMA(item))
+            {
+                await HandleInsSabaMsgForLevel(item, Levels.Agent);
+            }
 
-		foreach (var item in tickets.GroupBy(x => x.ProgramId))
-		{
-			if (IsExistMember(item))
-			{
-				await HandleInsSabaMsgForLevel(item, Levels.Member);
-			}
+            await sabaProgramStatusService.UpdateSabaProgramStatus(item.First().SId);
+        }
+    }
 
-			if (IsExistSMA(item))
-			{
-				await HandleInsSabaMsgForLevel(item, Levels.Agent);
-			}
+    private async Task HandleInsSabaMsgForLevel(IGrouping<int, SabaWalletTicket> item, string level)
+    {
+        var messageId = await CreateMsg(item.First(), level);
+        var messageItems = generateMessageService.CreateMessageItems(item, messageId, level).ToList();
+        await messageService.UploadBatchMessage(messageItems);
+    }
 
-			await sabaProgramStatusService.UpdateSabaProgramStatus(item.First().SId);
-		}
-	}
+    private async Task<int> CreateMsg(SabaWalletTicket ticket, string level)
+    {
+        var msgInsCriteria = new MsgInsCriteria
+        {
+            MsgContentsType = 200,
+            MsgType = 1,
+            Creator = Creator.Id,
+            ContentEng = generateMessageService.CreateMessageContent(ticket, ContentLanguage.English, level),
+            ContentCh = generateMessageService.CreateMessageContent(ticket, ContentLanguage.Cantonese, level),
+            ContentCs = generateMessageService.CreateMessageContent(ticket, ContentLanguage.Mandarin, level),
+            ContentId = generateMessageService.CreateMessageContent(ticket, ContentLanguage.Indo, level),
+        };
 
-	private async Task HandleInsSabaMsgForLevel(IGrouping<int, SabaWalletTicket> item, string level)
-	{
-		var messageId = await CreateMsg(item.First(), level);
-		var messageItems = generateMessageService.CreateMessageItems(item, messageId, level).ToList();
-		await messageService.UploadBatchMessage(messageItems);
-	}
+        var messageId = await messageService.CreateMessage(msgInsCriteria);
 
-	private async Task<int> CreateMsg(SabaWalletTicket ticket, string level)
-	{
-		var msgInsCriteria = new MsgInsCriteria
-		{
-			MsgContentsType = 200,
-			MsgType = 1,
-			Creator = Creator.Id,
-			ContentEng = generateMessageService.CreateMessageContent(ticket, ContentLanguage.English, level),
-			ContentCh = generateMessageService.CreateMessageContent(ticket, ContentLanguage.Cantonese, level),
-			ContentCs = generateMessageService.CreateMessageContent(ticket, ContentLanguage.Mandarin, level),
-			ContentId = generateMessageService.CreateMessageContent(ticket, ContentLanguage.Indo, level),
-		};
+        return messageId;
+    }
 
-		var messageId = await messageService.CreateMessage(msgInsCriteria);
+    private bool IsExistMember(IEnumerable<SabaWalletTicket> tickets)
+        => tickets.Any(x => x.CustId != 0);
 
-		return messageId;
-	}
-
-	private bool IsExistMember(IEnumerable<SabaWalletTicket> tickets)
-		=> tickets.Any(x => x.CustId != 0);
-
-	private bool IsExistSMA(IEnumerable<SabaWalletTicket> tickets)
-		=> tickets.Any(x => x.AgentId != 0 || x.MasterId != 0 || x.SuperId != 0);
+    private bool IsExistSMA(IEnumerable<SabaWalletTicket> tickets)
+        => tickets.Any(x => x.AgentId != 0 || x.MasterId != 0 || x.SuperId != 0);
 }

@@ -6,22 +6,15 @@ namespace RebateRetention.Services;
 
 public interface SabaWalletService
 {
-	Task<IEnumerable<SabaWalletTicket>> GetSabaWalletTickets();
+    Task<IEnumerable<SabaWalletTicket>> GetSabaWalletTickets();
 }
 
-public class SabaWalletServiceImp : SabaWalletService
+public class SabaWalletServiceImp(IDynamicRepository repository) : SabaWalletService
 {
-	private readonly IDynamicRepository repository;
+    public async Task<IEnumerable<SabaWalletTicket>> GetSabaWalletTickets()
+    {
+        var criteria = new SabaWalletTicketSelCriteria();
 
-	public SabaWalletServiceImp(IDynamicRepository repository)
-	{
-		this.repository = repository;
-	}
-
-	public async Task<IEnumerable<SabaWalletTicket>> GetSabaWalletTickets()
-	{
-		var criteria = new SabaWalletTicketSelCriteria();
-
-		return await repository.FetchAsync<SabaWalletTicket>(criteria);
-	}
+        return await repository.FetchAsync<SabaWalletTicket>(criteria);
+    }
 }
