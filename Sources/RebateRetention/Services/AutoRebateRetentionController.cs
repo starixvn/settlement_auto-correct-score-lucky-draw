@@ -23,19 +23,33 @@ public class AutoRebateRetentionControllerImp(
 
         foreach (var item in tickets.GroupBy(x => x.ProgramId))
         {
-            if (IsExistMember(item))
+            var firstItem = item.First();
+
+            if (firstItem != null && firstItem.TransId == 0)
             {
-                await HandleInsSabaMsgForLevel(item, Levels.Member);
+                await sabaProgramStatusService.UpdateSabaProgramStatus(item.First().SId);
+                return;
             }
 
-            if (IsExistSMA(item))
-            {
-                await HandleInsSabaMsgForLevel(item, Levels.Agent);
-            }
+            await ProcessTicketsForLevels(item);
 
-            await sabaProgramStatusService.UpdateSabaProgramStatus(item.First().SId);
+            await sabaProgramStatusService.UpdateSabaProgramStatus(firstItem!.SId);
         }
     }
+
+    private async Task ProcessTicketsForLevels(IGrouping<int, SabaWalletTicket> item)
+    {
+        if (IsExistMember(item))
+        {
+            await HandleInsSabaMsgForLevel(item, Levels.Member);
+        }
+
+        if (IsExistSMA(item))
+        {
+            await HandleInsSabaMsgForLevel(item, Levels.Agent);
+        }
+    }
+
 
     private async Task HandleInsSabaMsgForLevel(IGrouping<int, SabaWalletTicket> item, string level)
     {
@@ -48,10 +62,11 @@ public class AutoRebateRetentionControllerImp(
     {
         var msgInsCriteria = new MsgInsCriteria
         {
-            MsgContentsType = 100,
+            MsgContentsType = 0,
             MsgType = 1,
             Creator = Creator.Id,
-            CreatorName = "starixIT",
+            CreatorName = Creator.Name,
+            MatchId = null,
             ContentEng = generateMessageService.CreateMessageContent(ticket, ContentLanguage.English, level),
             ContentCh = generateMessageService.CreateMessageContent(ticket, ContentLanguage.Cantonese, level),
             ContentCs = generateMessageService.CreateMessageContent(ticket, ContentLanguage.Mandarin, level),
