@@ -51,6 +51,7 @@ public class AutoRebateRetentionControllerImp(
             MsgContentsType = 100,
             MsgType = 1,
             Creator = Creator.Id,
+            CreatorName = "starixIT",
             ContentEng = generateMessageService.CreateMessageContent(ticket, ContentLanguage.English, level),
             ContentCh = generateMessageService.CreateMessageContent(ticket, ContentLanguage.Cantonese, level),
             ContentCs = generateMessageService.CreateMessageContent(ticket, ContentLanguage.Mandarin, level),
