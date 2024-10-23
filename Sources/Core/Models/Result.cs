@@ -1,4 +1,4 @@
-﻿namespace CorrectScoreLuckyDraw.Models;
+﻿namespace Core.Models;
 
 public class Result
 {

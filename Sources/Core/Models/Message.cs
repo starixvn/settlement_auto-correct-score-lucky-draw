@@ -1,6 +1,6 @@
 ﻿using System.Xml.Serialization;
 
-namespace CorrectScoreLuckyDraw.Models;
+namespace Core.Models;
 
 [XmlRoot("Messages")]
 public class Message
@@ -20,5 +20,6 @@ public class MessageItem
     [XmlAttribute]
     public string TargetName { get; set; }
 
-    [XmlAttribute] public string BetTransId { get; set; } = "Null";
+    [XmlAttribute]
+    public string BetTransId { get; set; } = "Null";
 }

@@ -1,7 +1,7 @@
 ﻿using ONEbook.UM;
 using ONEbook.UM.Services;
 
-namespace CorrectScoreLuckyDraw.Services;
+namespace Core.Services;
 
 public interface IMaintenanceService
 {

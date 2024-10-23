@@ -1,8 +1,9 @@
 ﻿using Fanex.Data;
+using Fanex.Data.Repository;
 
-namespace CorrectScoreLuckyDraw.Criteria;
+namespace Core.Criteria;
 
-public class InsertMessageCriteria : NonQueryCommand
+public class MsgInsCriteria : NonQueryCommand
 {
     public int? MessageId { get; set; }
 
@@ -18,17 +19,17 @@ public class InsertMessageCriteria : NonQueryCommand
     [SpParam(SqlParamName = "Content_id")]
     public string ContentId { get; set; }
 
-    public int MatchId { get; set; }
+    public int? MatchId { get; set; }
 
-    public short MsgType { get; set; } = 1;
+    public short MsgType { get; set; }
 
-    public int MsgContentsType { get; set; } = 112;
+    public int MsgContentsType { get; set; }
 
-    public int Creator { get; set; } = Constants.Creator.Id;
+    public int Creator { get; set; }
 
     public string CreatorName { get; set; } = string.Empty;
 
     public override string GetSettingKey() => "NAP_SpecialDelete_Message_Insert";
 
-    public override bool IsValid() => MatchId > 0;
+    public override bool IsValid() => !string.IsNullOrEmpty(ContentEng);
 }

@@ -1,7 +1,9 @@
 FROM hub.nexdev.net/base/dotnet/core/sdk:8.0-alpine AS builder
 WORKDIR /src
 
+COPY ./Sources/Core ./Core
 COPY ./Sources/CorrectScoreLuckyDraw ./CorrectScoreLuckyDraw
+COPY ./Sources/RebateRetention ./RebateRetention
 COPY ./Sources/AutoCorrectScoreLuckyDraw.Service/AutoCorrectScoreLuckyDraw.Service.csproj ./AutoCorrectScoreLuckyDraw.Service/AutoCorrectScoreLuckyDraw.Service.csproj
 
 WORKDIR /src/AutoCorrectScoreLuckyDraw.Service

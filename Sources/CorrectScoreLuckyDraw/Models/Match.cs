@@ -1,5 +1,5 @@
-﻿using CorrectScoreLuckyDraw.Constants;
-using CorrectScoreLuckyDraw.Services;
+﻿using Core.Constants;
+using Core.Services;
 
 namespace CorrectScoreLuckyDraw.Models;
 

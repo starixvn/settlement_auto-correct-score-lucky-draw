@@ -1,24 +1,22 @@
-﻿using CorrectScoreLuckyDraw.Criteria;
-using CorrectScoreLuckyDraw.Models;
+﻿using Core.Criteria;
+using Core.Models;
+using Fanex.Data.Repository;
 using Fanex.Settlement.Converter.Services;
 
-namespace CorrectScoreLuckyDraw.Services;
+namespace Core.Services;
 
-public interface BatchMessageService
+public interface IMessageService
 {
-    Task<int> GetMessageId(Ticket ticket, string level);
+    Task<int> CreateMessage(MsgInsCriteria criteria);
 
     Task<Result> UploadBatchMessage(List<MessageItem> items);
 }
 
-public class BatchMessageServiceImp(
-    IDynamicRepository repository,
-    MessageAnnouncementService messageAnnouncementService,
-    XmlConvertService xmlConvertService) : BatchMessageService
+public class MessageService(IDynamicRepository repository, XmlConvertService xmlConvertService)
+    : IMessageService
 {
-    public async Task<int> GetMessageId(Ticket ticket, string level)
+    public async Task<int> CreateMessage(MsgInsCriteria criteria)
     {
-        var criteria = messageAnnouncementService.CreateMessageCriteria(ticket, level);
         return await repository.GetAsync<int>(criteria);
     }
 

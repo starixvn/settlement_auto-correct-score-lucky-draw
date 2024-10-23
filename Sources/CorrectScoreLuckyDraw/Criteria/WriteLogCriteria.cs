@@ -1,4 +1,6 @@
-﻿namespace CorrectScoreLuckyDraw.Criteria;
+﻿using Action = Core.Constants.Action;
+
+namespace CorrectScoreLuckyDraw.Criteria;
 
 public class WriteLogCriteria : NonQueryCommand
 {
@@ -10,7 +12,7 @@ public class WriteLogCriteria : NonQueryCommand
 
     public string Ip { get; } = string.Empty;
 
-    public int ActionId { get; set; } = Constants.Action.ActionId;
+    public int ActionId { get; set; } = Action.ActionId;
 
     public override bool IsValid() => MatchId > 0;
 

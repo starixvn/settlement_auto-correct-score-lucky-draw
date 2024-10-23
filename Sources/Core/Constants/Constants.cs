@@ -1,4 +1,4 @@
-﻿namespace CorrectScoreLuckyDraw.Constants;
+﻿namespace Core.Constants;
 
 public static class Action
 {
@@ -8,6 +8,7 @@ public static class Action
 public static class Creator
 {
     public const int Id = 10_278_938;
+    public const string Name = "starixIT";
 }
 
 public static class Site
