@@ -1,6 +1,6 @@
 ﻿using AutoCorrectScoreLuckyDraw.Service;
 using AutoCorrectScoreLuckyDraw.Service.Services;
-using CorrectScoreLuckyDraw.Models;
+using Core.Models;
 using Fanex.Data.SqlServer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
