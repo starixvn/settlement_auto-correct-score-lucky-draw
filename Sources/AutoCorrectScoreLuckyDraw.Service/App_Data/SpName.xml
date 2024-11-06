@@ -8,7 +8,6 @@
 
 		<Setting Key="NAP_SabaWalletTicket_Notification_Sel" SpName="NAP_SabaWalletTicket_Notification_Sel" DbName="DBSIC.bodb02.wsv_nap" TimeOut="20" />
 		<Setting Key="NAP_SabaWalletTicket_Ins" SpName="NAP_SabaWalletTicket_Ins" DbName="DBSIC.bodb02.wsv_nap" />
-		<Setting Key="NAP_SabaProgramStatus_Ins" SpName="NAP_SabaProgramStatus_Ins" DbName="DBSIC.bodb02.wsv_nap" />
 		<Setting Key="NAP_SabaProgramStatus_Upd" SpName="NAP_SabaProgramStatus_Upd" DbName="DBSIC.bodb02.wsv_nap" />
 	</Function>
 

@@ -1,4 +1,6 @@
-﻿namespace CorrectScoreLuckyDraw.Models;
+using System;
+
+namespace Core.Models;
 
 public class Email
 {

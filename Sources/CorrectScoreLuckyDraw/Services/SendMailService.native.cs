@@ -1,4 +1,5 @@
-﻿using CorrectScoreLuckyDraw.Models;
+﻿using Core.Models;
+using CorrectScoreLuckyDraw.Models;
 using Fanex.MailDeliver.MailClient.Model;
 using Microsoft.Extensions.Options;
 using RazorEngine;

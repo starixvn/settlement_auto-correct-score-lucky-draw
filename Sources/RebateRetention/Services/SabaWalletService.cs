@@ -1,4 +1,6 @@
-﻿using Fanex.Data.Repository;
+﻿using Core.Models;
+using Fanex.Data.Repository;
+using Microsoft.Extensions.Options;
 using RebateRetention.Criteria;
 using RebateRetention.Models;
 
@@ -9,11 +11,15 @@ public interface SabaWalletService
     Task<IEnumerable<SabaWalletTicket>> GetSabaWalletTickets();
 }
 
-public class SabaWalletServiceImp(IDynamicRepository repository) : SabaWalletService
+public class SabaWalletServiceImp(IDynamicRepository repository, IOptions<AppSettingsKey> options) : SabaWalletService
 {
     public async Task<IEnumerable<SabaWalletTicket>> GetSabaWalletTickets()
     {
-        var criteria = new SabaWalletTicketSelCriteria();
+        var isTest = options.Value.EnvironmentName == "UAT";
+        var criteria = new SabaWalletTicketSelCriteria 
+        {
+            IsTest = isTest
+        };
 
         return await repository.FetchAsync<SabaWalletTicket>(criteria);
     }
