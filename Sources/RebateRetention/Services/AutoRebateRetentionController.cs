@@ -25,7 +25,7 @@ public class AutoRebateRetentionControllerImp(
         {
             var firstItem = item.First();
 
-            if (firstItem != null && firstItem.TransId == 0)
+            if (firstItem is { TransId: 0 })
             {
                 await sabaProgramStatusService.UpdateSabaProgramStatus(item.First().SId);
                 return;
@@ -49,7 +49,6 @@ public class AutoRebateRetentionControllerImp(
             await HandleInsSabaMsgForLevel(item, Levels.Agent);
         }
     }
-
 
     private async Task HandleInsSabaMsgForLevel(IGrouping<int, SabaWalletTicket> item, string level)
     {

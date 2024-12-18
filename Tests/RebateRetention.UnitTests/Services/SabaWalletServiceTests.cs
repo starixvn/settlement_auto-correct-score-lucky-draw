@@ -1,4 +1,6 @@
-﻿using Fanex.Data.Repository;
+﻿using Core.Models;
+using Fanex.Data.Repository;
+using Microsoft.Extensions.Options;
 using NSubstitute;
 using RebateRetention.Criteria;
 using RebateRetention.Models;
@@ -8,33 +10,35 @@ namespace RebateRetention.UnitTests.Services;
 
 public class SabaWalletServiceTests
 {
-	private readonly IDynamicRepository repository;
-	private readonly SabaWalletService sabaWalletService;
+    private readonly IDynamicRepository repository;
+    private readonly SabaWalletServiceImp sabaWalletService;
 
-	public SabaWalletServiceTests()
-	{
-		repository = Substitute.For<IDynamicRepository>();
-		sabaWalletService = new SabaWalletServiceImp(repository);
-	}
+    public SabaWalletServiceTests()
+    {
+        var appSettingsKey = Substitute.For<IOptions<AppSettingsKey>>();
+        appSettingsKey.Value.Returns(new AppSettingsKey { EnvironmentName = "UAT" });
+        repository = Substitute.For<IDynamicRepository>();
+        sabaWalletService = new SabaWalletServiceImp(repository, appSettingsKey);
+    }
 
-	[Fact]
-	public async Task GetSabaWalletTickets_ShouldReturnTicketsFromRepository()
-	{
-		// Arrange
-		var expectedTickets = new List<SabaWalletTicket>
-		{
-			new SabaWalletTicket { ProgramId = 1, TransId = 12, CustId = 1001 },
-			new SabaWalletTicket { ProgramId = 2, TransId = 123, CustId = 1002 }
-		};
+    [Fact]
+    public async Task GetSabaWalletTickets_ShouldReturnTicketsFromRepository()
+    {
+        // Arrange
+        var expectedTickets = new List<SabaWalletTicket>
+        {
+            new() { ProgramId = 1, TransId = 12, CustId = 1001 },
+            new() { ProgramId = 2, TransId = 123, CustId = 1002 }
+        };
 
-		repository.FetchAsync<SabaWalletTicket>(Arg.Any<SabaWalletTicketSelCriteria>())
-				   .Returns(expectedTickets);
+        repository.FetchAsync<SabaWalletTicket>(Arg.Any<SabaWalletTicketSelCriteria>())
+                   .Returns(expectedTickets);
 
-		// Act
-		var result = await sabaWalletService.GetSabaWalletTickets();
+        // Act
+        var result = await sabaWalletService.GetSabaWalletTickets();
 
-		// Assert
-		await repository.Received(1).FetchAsync<SabaWalletTicket>(Arg.Any<SabaWalletTicketSelCriteria>());
-		Assert.Equal(expectedTickets, result);
-	}
+        // Assert
+        await repository.Received(1).FetchAsync<SabaWalletTicket>(Arg.Any<SabaWalletTicketSelCriteria>());
+        Assert.Equal(expectedTickets, result);
+    }
 }

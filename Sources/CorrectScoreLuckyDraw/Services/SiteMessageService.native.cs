@@ -35,7 +35,7 @@ public class SiteMessageServiceImp(MessageAnnouncementService messageAnnouncemen
         return await messageService.UploadBatchMessage(listMessages);
     }
 
-    public async Task<int> GetMessageId(Ticket ticket, string level)
+    private async Task<int> GetMessageId(Ticket ticket, string level)
     {
         var criteria = messageAnnouncementService.CreateMessageCriteria(ticket, level);
 

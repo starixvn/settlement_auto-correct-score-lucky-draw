@@ -8,22 +8,13 @@ using RebateRetention.Services;
 
 namespace AutoCorrectScoreLuckyDraw.Service.Services;
 
-public class RebateRetentionService : BackgroundService
+public class RebateRetentionService(
+    IConfiguration configuration,
+    IMaintenanceService maintenanceService,
+    AutoRebateRetentionController autoRebateRetentionController)
+    : BackgroundService
 {
-    private readonly IConfiguration configuration;
-    private readonly IMaintenanceService maintenanceService;
-    private readonly AutoRebateRetentionController autoRebateRetentionController;
     private int counter;
-
-    public RebateRetentionService(
-        IConfiguration configuration,
-        IMaintenanceService maintenanceService,
-        AutoRebateRetentionController autoRebateRetentionController)
-    {
-        this.configuration = configuration;
-        this.maintenanceService = maintenanceService;
-        this.autoRebateRetentionController = autoRebateRetentionController;
-    }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
