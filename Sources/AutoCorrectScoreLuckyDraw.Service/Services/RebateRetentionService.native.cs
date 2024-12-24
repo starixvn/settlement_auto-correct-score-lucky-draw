@@ -1,9 +1,9 @@
-﻿using Core.Services;
-using Fanex.Logging;
+﻿using Fanex.Logging;
 using Fanex.Logging.Extensions;
 using Fanex.Logging.Extensions.Database;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
+using ONEbook.UM.Services;
 using RebateRetention.Services;
 
 namespace AutoCorrectScoreLuckyDraw.Service.Services;
@@ -30,7 +30,8 @@ public class RebateRetentionService(
     {
         try
         {
-            if (!maintenanceService.IsMaintenance)
+            var isMaintenance = await maintenanceService.IsUnderMaintenanceAsync();
+            if (!isMaintenance)
             {
                 await autoRebateRetentionController.Process();
                 HandleGarbageCollector();
