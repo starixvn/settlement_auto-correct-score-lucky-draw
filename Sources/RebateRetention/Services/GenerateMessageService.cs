@@ -65,8 +65,8 @@ public class GenerateMessageServiceImp(RefDataService refDataService) : Generate
     {
         return (programId, level) switch
         {
-            (_, Levels.Member) => GetTemplateForMember(1, languageCode),
-            (_, Levels.Agent) => GetTemplateForSMA(1, languageCode),
+            (_, Levels.Member) => GetTemplateForMember(default, languageCode),
+            (_, Levels.Agent) => GetTemplateForSMA(default, languageCode),
             _ => string.Empty
         };
     }
@@ -78,7 +78,7 @@ public class GenerateMessageServiceImp(RefDataService refDataService) : Generate
             (_, ContentLanguage.English) => MsgContent.MemberEng,
             (_, ContentLanguage.Cantonese) => MsgContent.MemberCantonese,
             (_, ContentLanguage.Mandarin) => MsgContent.MemberMandarin,
-            (_, ContentLanguage.Indo) => MsgContent.MemberIndo,
+            (_, ContentLanguage.Thai) => MsgContent.MemberThai,
             _ => string.Empty
         };
     }
@@ -90,7 +90,7 @@ public class GenerateMessageServiceImp(RefDataService refDataService) : Generate
             (_, ContentLanguage.English) => MsgContent.SMAEng,
             (_, ContentLanguage.Cantonese) => MsgContent.SMACantonese,
             (_, ContentLanguage.Mandarin) => MsgContent.SMAMandarin,
-            (_, ContentLanguage.Indo) => MsgContent.SMAIndo,
+            (_, ContentLanguage.Thai) => MsgContent.SMAThai,
             _ => string.Empty
         };
     }

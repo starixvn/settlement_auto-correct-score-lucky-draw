@@ -69,7 +69,7 @@ public class AutoRebateRetentionControllerImp(
             ContentEng = generateMessageService.CreateMessageContent(ticket, ContentLanguage.English, level),
             ContentCh = generateMessageService.CreateMessageContent(ticket, ContentLanguage.Cantonese, level),
             ContentCs = generateMessageService.CreateMessageContent(ticket, ContentLanguage.Mandarin, level),
-            ContentId = generateMessageService.CreateMessageContent(ticket, ContentLanguage.Indo, level),
+            ContentThai = generateMessageService.CreateMessageContent(ticket, ContentLanguage.Thai, level)
         };
 
         var messageId = await messageService.CreateMessage(msgInsCriteria);
