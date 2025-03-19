@@ -19,6 +19,11 @@ public class MsgInsCriteria : NonQueryCommand
     [SpParam(SqlParamName = "Content_id")]
     public string ContentId { get; set; }
 
+    [SpParam(SqlParamName = "Content_th")]
+    public string ContentThai { get; set; }
+
+
+
     public int? MatchId { get; set; }
 
     public short MsgType { get; set; }
