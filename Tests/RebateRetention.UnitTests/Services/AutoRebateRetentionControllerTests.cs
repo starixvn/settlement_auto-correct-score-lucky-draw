@@ -43,7 +43,7 @@ public class AutoRebateRetentionControllerTests
         generateMessageService.CreateMessageItems(Arg.Any<IEnumerable<SabaWalletTicket>>(), Arg.Any<int>(), Arg.Any<string>())
             .Returns(new List<MessageItem> { new MessageItem { MessageId = 1, TargetId = 1001 } });
 
-        messageService.CreateMessage(Arg.Any<MsgInsCriteria>()).Returns(1);
+        messageService.CreateMessage(Arg.Any<InsertMessageCriteria>()).Returns(1);
 
         // Act
         await controller.Process();
@@ -68,7 +68,7 @@ public class AutoRebateRetentionControllerTests
         generateMessageService.CreateMessageItems(Arg.Any<IEnumerable<SabaWalletTicket>>(), Arg.Any<int>(), Arg.Any<string>())
             .Returns(new List<MessageItem> { new MessageItem { MessageId = 1, TargetId = 2001 } });
 
-        messageService.CreateMessage(Arg.Any<MsgInsCriteria>()).Returns(1);
+        messageService.CreateMessage(Arg.Any<InsertMessageCriteria>()).Returns(1);
 
         // Act
         await controller.Process();
@@ -93,7 +93,7 @@ public class AutoRebateRetentionControllerTests
         generateMessageService.CreateMessageItems(Arg.Any<IEnumerable<SabaWalletTicket>>(), Arg.Any<int>(), Arg.Any<string>())
             .Returns(new List<MessageItem> { new MessageItem { MessageId = 1, TargetId = 1001 }, new MessageItem { MessageId = 1, TargetId = 2001 } });
 
-        messageService.CreateMessage(Arg.Any<MsgInsCriteria>()).Returns(1);
+        messageService.CreateMessage(Arg.Any<InsertMessageCriteria>()).Returns(1);
 
         // Act
         await controller.Process();

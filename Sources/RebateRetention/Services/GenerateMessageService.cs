@@ -1,7 +1,5 @@
 ﻿using Core.Constants;
 using Core.Models;
-using Core.Services;
-using RebateRetention.Constants;
 using RebateRetention.Models;
 
 namespace RebateRetention.Services;
@@ -13,7 +11,9 @@ public interface GenerateMessageService
     string CreateMessageContent(SabaWalletTicket ticket, string languageCode, string level);
 }
 
-public class GenerateMessageServiceImp(RefDataService refDataService) : GenerateMessageService
+public class GenerateMessageServiceImp(
+    MessageTemplateProviderFactory templateProviderFactory)
+    : GenerateMessageService
 {
     public IEnumerable<MessageItem> CreateMessageItems(IEnumerable<SabaWalletTicket> tickets, int messageId, string level)
     {
@@ -35,11 +35,8 @@ public class GenerateMessageServiceImp(RefDataService refDataService) : Generate
 
     public string CreateMessageContent(SabaWalletTicket ticket, string languageCode, string level)
     {
-        var template = GetTemplate(ticket.ProgramId, level, languageCode);
-        var programName = refDataService.GetProgramName(ticket.ProgramId, languageCode);
-
-        return template
-            .Replace("@program_name", programName);
+        var provider = templateProviderFactory.GetProvider(ticket.ProgramId);
+        return provider.GetTemplate(level, languageCode, ticket);
     }
 
     private static IEnumerable<MessageItem> GenerateMessageItems(
@@ -59,39 +56,5 @@ public class GenerateMessageServiceImp(RefDataService refDataService) : Generate
                 MessageId = messageId
             })
             .ToList();
-    }
-
-    private static string GetTemplate(int programId, string level, string languageCode)
-    {
-        return (programId, level) switch
-        {
-            (_, Levels.Member) => GetTemplateForMember(default, languageCode),
-            (_, Levels.Agent) => GetTemplateForSMA(default, languageCode),
-            _ => string.Empty
-        };
-    }
-
-    private static string GetTemplateForMember(int programId, string languageCode)
-    {
-        return (programId, languageCode) switch
-        {
-            (_, ContentLanguage.English) => MsgContent.MemberEng,
-            (_, ContentLanguage.Cantonese) => MsgContent.MemberCantonese,
-            (_, ContentLanguage.Mandarin) => MsgContent.MemberMandarin,
-            (_, ContentLanguage.Thai) => MsgContent.MemberThai,
-            _ => string.Empty
-        };
-    }
-
-    private static string GetTemplateForSMA(int programId, string languageCode)
-    {
-        return (programId, languageCode) switch
-        {
-            (_, ContentLanguage.English) => MsgContent.SMAEng,
-            (_, ContentLanguage.Cantonese) => MsgContent.SMACantonese,
-            (_, ContentLanguage.Mandarin) => MsgContent.SMAMandarin,
-            (_, ContentLanguage.Thai) => MsgContent.SMAThai,
-            _ => string.Empty
-        };
     }
 }

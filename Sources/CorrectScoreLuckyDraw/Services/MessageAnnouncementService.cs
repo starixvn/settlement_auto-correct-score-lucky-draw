@@ -9,14 +9,14 @@ namespace CorrectScoreLuckyDraw.Services;
 
 public interface MessageAnnouncementService
 {
-    MsgInsCriteria CreateMessageCriteria(Ticket ticket, string level);
+    InsertMessageCriteria CreateMessageCriteria(Ticket ticket, string level);
 
     MessageItem CreateMessageItem(Ticket ticket, int messageId, string level);
 }
 
 public class MessageAnnouncementServiceImp(RefDataService refDataService) : MessageAnnouncementService
 {
-    public MsgInsCriteria CreateMessageCriteria(Ticket ticket, string level)
+    public InsertMessageCriteria CreateMessageCriteria(Ticket ticket, string level)
     {
         ticket.RefDataService = refDataService;
         if (!ticket.Site.Equals(Site.IBCIndo))
@@ -24,7 +24,7 @@ public class MessageAnnouncementServiceImp(RefDataService refDataService) : Mess
             ticket.ExpiredDate = ticket.ExpiredDate.AddDays(1);
         }
 
-        return new MsgInsCriteria
+        return new InsertMessageCriteria
         {
             ContentEng = CreateMessageContent(ticket, ContentLanguage.English, level),
             ContentCh = CreateMessageContent(ticket, ContentLanguage.Cantonese, level),

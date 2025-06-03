@@ -3,7 +3,7 @@ using Fanex.Data.Repository;
 
 namespace Core.Criteria;
 
-public class MsgInsCriteria : NonQueryCommand
+public class InsertMessageCriteria : NonQueryCommand
 {
     public int? MessageId { get; set; }
 
@@ -21,8 +21,6 @@ public class MsgInsCriteria : NonQueryCommand
 
     [SpParam(SqlParamName = "Content_th")]
     public string ContentThai { get; set; }
-
-
 
     public int? MatchId { get; set; }
 

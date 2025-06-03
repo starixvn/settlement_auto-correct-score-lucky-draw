@@ -1,6 +1,6 @@
 ﻿namespace RebateRetention.Constants;
 
-public static class MsgContent
+public static class MessageContent
 {
     public const string MemberEng = "Dear valued customer, Congratulations! You've won a reward from our company. Please contact your upline to claim your prize. If you're unable to claim it, please provide feedback via your Statement. Don’t miss out! Thank you.";
 
@@ -18,4 +18,3 @@ public static class MsgContent
 
     public const string SMAThai = "เรียนลูกค้าที่เคารพ, ขอแสดงความยินดี! สมาชิกของคุณได้ชนะใน @program_name และจะได้รับรางวัล กรุณาดูที่ \"การจ่ายเงินรางวัล\" เพื่อดูรายละเอียดและช่วยกระจายเงินไปยังลูกข่ายของคุณ. ขอบคุณ.";
 }
-
