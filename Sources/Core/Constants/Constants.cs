@@ -35,3 +35,8 @@ public static class ContentLanguage
     public const string Mandarin = "zh-CN";
     public const string Thai = "th-TH";
 }
+
+public static class ProgramId
+{
+    public const int SixScoreChallenge = 3;
+}
