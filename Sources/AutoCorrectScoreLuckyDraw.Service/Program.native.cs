@@ -3,26 +3,24 @@ using AutoCorrectScoreLuckyDraw.Service.Services;
 using Core.Models;
 using Fanex.Data.SqlServer;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
+var services = builder.Services;
 
-builder.Services.AddFanexSql(builder.Configuration);
+services.AddFanexSql(builder.Configuration);
 
-builder.Services.Configure<AppSettingsKey>(builder.Configuration);
+services.Configure<AppSettingsKey>(builder.Configuration);
 
-builder.Services.InitializeServices(builder.Configuration);
+services.InitializeServices(builder.Configuration);
 
-builder.Services.AddHostedService<LuckyDrawService>();
+services.AddHostedService<LuckyDrawService>();
 
-builder.Services.AddHostedService<RebateRetentionService>();
+services.AddHostedService<RebateRetentionService>();
+
+services.AddHealthChecks();
 
 var app = builder.Build();
+app.MapHealthChecks("/healthz");
 
-app.Run(async context =>
-{
-	await context.Response.WriteAsync("OK");
-});
-
-app.Run();
+await app.RunAsync();

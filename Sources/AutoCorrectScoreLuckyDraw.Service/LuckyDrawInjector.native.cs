@@ -18,7 +18,7 @@ public static class LuckyDrawInjector
     public static void InitializeServices(this IServiceCollection service, IConfiguration configuration)
     {
         service.AddFanexLogSentry(configuration);
-        service.AddOneBookUm(configuration);
+        service.AddOneBookUmForService(configuration);
 
         service.AddSingleton<IMessageService, MessageService>();
         service.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
