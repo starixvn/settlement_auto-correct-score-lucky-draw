@@ -51,7 +51,7 @@ public class MessageServiceTests
     public async Task CreateMessage_ShouldReturnMessageId_WhenRepositoryReturnsValidId()
     {
         // Arrange
-        var criteria = new MsgInsCriteria
+        var criteria = new InsertMessageCriteria
         {
             // Populate criteria as needed
         };
@@ -65,6 +65,6 @@ public class MessageServiceTests
 
         // Assert
         Assert.Equal(expectedMessageId, result);
-        await repository.Received(1).GetAsync<int>(Arg.Any<MsgInsCriteria>());
+        await repository.Received(1).GetAsync<int>(Arg.Any<InsertMessageCriteria>());
     }
 }

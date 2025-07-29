@@ -7,7 +7,7 @@ namespace Core.Services;
 
 public interface IMessageService
 {
-    Task<int> CreateMessage(MsgInsCriteria criteria);
+    Task<int> CreateMessage(InsertMessageCriteria criteria);
 
     Task<Result> UploadBatchMessage(List<MessageItem> items);
 }
@@ -15,7 +15,7 @@ public interface IMessageService
 public class MessageService(IDynamicRepository repository, XmlConvertService xmlConvertService)
     : IMessageService
 {
-    public async Task<int> CreateMessage(MsgInsCriteria criteria)
+    public async Task<int> CreateMessage(InsertMessageCriteria criteria)
     {
         return await repository.GetAsync<int>(criteria);
     }

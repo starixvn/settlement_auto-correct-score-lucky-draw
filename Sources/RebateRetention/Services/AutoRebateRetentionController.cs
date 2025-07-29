@@ -21,45 +21,48 @@ public class AutoRebateRetentionControllerImp(
     {
         var tickets = await sabaWalletService.GetSabaWalletTickets();
 
-        foreach (var item in tickets.GroupBy(x => x.ProgramId))
+        foreach (var programTickets in tickets.GroupBy(x => x.ProgramId))
         {
-            var firstItem = item.First();
-
-            if (firstItem is { TransId: 0 })
+            var firstTicket = programTickets.FirstOrDefault();
+            if (firstTicket is null)
             {
-                await sabaProgramStatusService.UpdateSabaProgramStatus(item.First().SId);
+                continue;
+            }
+
+            if (firstTicket.TransId == 0)
+            {
+                await sabaProgramStatusService.UpdateSabaProgramStatus(firstTicket.SId);
                 return;
             }
 
-            await ProcessTicketsForLevels(item);
-
-            await sabaProgramStatusService.UpdateSabaProgramStatus(firstItem!.SId);
+            await ProcessTicketsForLevelsAsync(programTickets);
+            await sabaProgramStatusService.UpdateSabaProgramStatus(firstTicket.SId);
         }
     }
 
-    private async Task ProcessTicketsForLevels(IGrouping<int, SabaWalletTicket> item)
+    private async Task ProcessTicketsForLevelsAsync(IGrouping<int, SabaWalletTicket> ticketsByProgram)
     {
-        if (IsExistMember(item))
+        if (IsExistMember(ticketsByProgram))
         {
-            await HandleInsSabaMsgForLevel(item, Levels.Member);
+            await HandleInsertSabaMsgForLevelAsync(ticketsByProgram, Levels.Member);
         }
 
-        if (IsExistSMA(item))
+        if (IsExistSMA(ticketsByProgram))
         {
-            await HandleInsSabaMsgForLevel(item, Levels.Agent);
+            await HandleInsertSabaMsgForLevelAsync(ticketsByProgram, Levels.Agent);
         }
     }
 
-    private async Task HandleInsSabaMsgForLevel(IGrouping<int, SabaWalletTicket> item, string level)
+    private async Task HandleInsertSabaMsgForLevelAsync(IGrouping<int, SabaWalletTicket> ticketsByProgram, string level)
     {
-        var messageId = await CreateMsg(item.First(), level);
-        var messageItems = generateMessageService.CreateMessageItems(item, messageId, level).ToList();
+        var messageId = await CreateMessageAsync(ticketsByProgram.First(), level);
+        var messageItems = generateMessageService.CreateMessageItems(ticketsByProgram, messageId, level).ToList();
         await messageService.UploadBatchMessage(messageItems);
     }
 
-    private async Task<int> CreateMsg(SabaWalletTicket ticket, string level)
+    private async Task<int> CreateMessageAsync(SabaWalletTicket ticket, string level)
     {
-        var msgInsCriteria = new MsgInsCriteria
+        var msgInsCriteria = new InsertMessageCriteria
         {
             MsgContentsType = 0,
             MsgType = 1,
@@ -73,13 +76,12 @@ public class AutoRebateRetentionControllerImp(
         };
 
         var messageId = await messageService.CreateMessage(msgInsCriteria);
-
         return messageId;
     }
 
-    private bool IsExistMember(IEnumerable<SabaWalletTicket> tickets)
+    private static bool IsExistMember(IEnumerable<SabaWalletTicket> tickets)
         => tickets.Any(x => x.CustId != 0);
 
-    private bool IsExistSMA(IEnumerable<SabaWalletTicket> tickets)
+    private static bool IsExistSMA(IEnumerable<SabaWalletTicket> tickets)
         => tickets.Any(x => x.AgentId != 0 || x.MasterId != 0 || x.SuperId != 0);
 }

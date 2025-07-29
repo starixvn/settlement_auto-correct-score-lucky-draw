@@ -43,7 +43,7 @@
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="14.0.0" />
     <PackageReference Include="Fanex.Caching.Redis.AspNetCore" Version="2.2.5" />
-    <PackageReference Include="Fanex.Data.SqlServer" Version="4.3.4.3" />
+    <PackageReference Include="Fanex.Data.SqlServer" Version="4.3.4.5" />
     <PackageReference Include="Fanex.Logging.Extensions.Database" Version="2.0.2.1" />
     <PackageReference Include="Fanex.Logging.Sentry.RavenClient" Version="2.0.2" />
     <PackageReference Include="Fanex.MailDeliver.MailClient" Version="2.1.0" />

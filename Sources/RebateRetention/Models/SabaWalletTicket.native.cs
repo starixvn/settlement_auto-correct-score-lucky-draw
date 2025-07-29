@@ -3,6 +3,7 @@
 public class SabaWalletTicket
 {
     public int SId { get; set; }
+
     public int ProgramId { get; set; }
 
     public int CustId { get; set; }
@@ -22,4 +23,8 @@ public class SabaWalletTicket
     public string SuperUsername { get; set; }
 
     public long TransId { get; set; }
+
+    public decimal Amount { get; set; }
+
+    public string CurrencyCode { get; set; }
 }
