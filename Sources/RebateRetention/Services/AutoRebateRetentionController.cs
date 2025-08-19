@@ -24,16 +24,6 @@ public class AutoRebateRetentionControllerImp(
         foreach (var programTickets in tickets.GroupBy(x => x.ProgramId))
         {
             var firstTicket = programTickets.FirstOrDefault();
-            if (firstTicket is null)
-            {
-                continue;
-            }
-
-            if (firstTicket.TransId == 0)
-            {
-                await sabaProgramStatusService.UpdateSabaProgramStatus(firstTicket.SId);
-                return;
-            }
 
             await ProcessTicketsForLevelsAsync(programTickets);
             await sabaProgramStatusService.UpdateSabaProgramStatus(firstTicket.SId);
@@ -44,19 +34,30 @@ public class AutoRebateRetentionControllerImp(
     {
         if (IsExistMember(ticketsByProgram))
         {
-            await HandleInsertSabaMsgForLevelAsync(ticketsByProgram, Levels.Member);
+            await HandleInsertSabaMsgForMember(ticketsByProgram);
         }
 
         if (IsExistSMA(ticketsByProgram))
         {
-            await HandleInsertSabaMsgForLevelAsync(ticketsByProgram, Levels.Agent);
+            await HandleInsertSabaMsgForAgent(ticketsByProgram);
         }
     }
 
-    private async Task HandleInsertSabaMsgForLevelAsync(IGrouping<int, SabaWalletTicket> ticketsByProgram, string level)
+    private async Task HandleInsertSabaMsgForMember(IGrouping<int, SabaWalletTicket> ticketsByProgram)
     {
-        var messageId = await CreateMessageAsync(ticketsByProgram.First(), level);
-        var messageItems = generateMessageService.CreateMessageItems(ticketsByProgram, messageId, level).ToList();
+        foreach (var ticket in ticketsByProgram)
+        {
+            var messageId = await CreateMessageAsync(ticket, Levels.Member);
+            var messageItems = generateMessageService.CreateMessageItems([ticket], messageId, Levels.Member).ToList();
+            await messageService.UploadBatchMessage(messageItems);
+        }
+    }
+
+
+    private async Task HandleInsertSabaMsgForAgent(IGrouping<int, SabaWalletTicket> ticketsByProgram)
+    {
+        var messageId = await CreateMessageAsync(ticketsByProgram.First(), Levels.Agent);
+        var messageItems = generateMessageService.CreateMessageItems(ticketsByProgram, messageId, Levels.Agent).ToList();
         await messageService.UploadBatchMessage(messageItems);
     }
 
