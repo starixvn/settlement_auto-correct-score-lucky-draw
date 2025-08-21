@@ -22,7 +22,7 @@ public class SendMailServiceTests
             .FromApplication("Settlement");
 
         AppSettings.AppMailId = "1";
-        AppSettings.AppMailAddress = "http://mail_service.nexdev.net:8787/";
+        AppSettings.AppMailAddress = "https://mailservice.klc.nexdev.net/";
         service = new SendMailServiceImp(options);
     }
 
